@@ -35,7 +35,5 @@ public class TicketToReturn {
 
         public void setCle(String cle) {
             this.cle = cle;
-        }
-    }
-    
+        }    
 }
