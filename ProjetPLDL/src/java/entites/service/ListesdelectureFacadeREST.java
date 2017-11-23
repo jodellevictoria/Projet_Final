@@ -6,10 +6,15 @@
 package entites.service;
 
 import entites.Listesdelecture;
+import entites.ListesdelectureMusiques;
+import entites.ListesdelectureMusiquesPK;
+import entites.Musiques;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -86,6 +91,50 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    @GET
+    @Path("voirListe/{idListe}")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    public List<ListesdelectureMusiquesPK> findRange(@PathParam("idListe") Integer idListe) {
+        //List<Musiques> musiquesInPlaylist = new ArrayList<Musiques>();
+        
+        List<ListesdelectureMusiques> listMusique = new ArrayList<ListesdelectureMusiques>();
+        Query q = em.createNamedQuery("ListesdelectureMusiques.findMusiquesByListeDeLecture");
+        q.setParameter("listeDeLecture", idListe);
+        
+        try{
+            listMusique = (List<ListesdelectureMusiques>) q.getResultList();
+        }
+        catch(Exception ex){
+            
+        }
+        
+        List<ListesdelectureMusiquesPK> lmPKList = new ArrayList<ListesdelectureMusiquesPK>();
+        
+        //@NamedQuery(name = "Musiques.findById", query = "SELECT m FROM Musiques m WHERE m.id = :id")
+        
+        for(int i = 0; i < listMusique.size(); i++){
+            ListesdelectureMusiquesPK lmPK = listMusique.get(i).getListesdelectureMusiquesPK();
+            lmPKList.add(lmPK);
+            
+            /*int musiqueID = lmPK.getMusique();
+            Musiques musique = new Musiques();
+            Query query = em.createNamedQuery("Musiques.findById");
+            q.setParameter("id", musiqueID);
+
+            try{
+                musique = (Musiques) query.getSingleResult();
+            }
+            catch(Exception ex){
+
+            }
+            
+            musiquesInPlaylist.add(musique);*/
+        }
+        
+        return lmPKList;
     }
     
 }

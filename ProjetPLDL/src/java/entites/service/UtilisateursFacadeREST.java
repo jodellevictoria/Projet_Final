@@ -166,6 +166,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             retour = Integer.toString(noTicket);
             // public Ticket(int noTicket, String cle, String chaineConfirmation, int idUtil) {
             ticket = new Ticket(noTicket, Integer.toString(cle), confirmationMD5, idUser);
+            tickets.put(noTicket, ticket);
             ticketReturn = new TicketToReturn(ticket.getNoTicket(),ticket.getCle());
         }
         else{
@@ -196,8 +197,8 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
                 System.out.println(dateFormat.format(date));
                
                 //placerUtilisateur(String courriel, String motDePasse, String alias, int avatar, boolean actif, Date date)
-                int idUtilisateur = gestionnaireCommande.placerUtilisateur(listTickets.get(i).getCourriel(),listTickets.get(i).getMotDePasse(),listTickets.get(i).getNom(),1,true,date );
-                listTickets.remove(listTickets.get(i));
+                //int idUtilisateur = gestionnaireCommande.placerUtilisateur(listTickets.get(i).getCourriel(),listTickets.get(i).getMotDePasse(),listTickets.get(i).getNom(),1,true,date );
+                //listTickets.remove(listTickets.get(i));
                 boolTempo=true;
                 break;
             }
@@ -209,10 +210,10 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         }
         else
         {
-            flux="l'utilisateur à été ajouter";
+            flux="erreur, c'est pas le bon captcha ou pas le bon numero de ticket";
         }
        
-        return "";
+        return flux;
     }
    
    
@@ -230,6 +231,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
        
         String numTicket = n+"";      
         Tickets ticket =null ;
+        String flux = "lol";
        
        
         int length = 7 + (Math.abs(x.nextInt()) % 3);
@@ -257,8 +259,13 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         Utilisateurs utilisateurs = null;
         try{
             utilisateurs = (Utilisateurs) q.getSingleResult();
+        }
+        catch(Exception ex){   
            
-            if(utilisateurs==null)
+        }
+        
+        
+        if(utilisateurs!=null)
             {
                 ticket = null;
             }
@@ -276,12 +283,12 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
                 }
                 if(boolTempo==true)
                 {
-                    ticket = new  Tickets(numTicket,nom,courriel,motDePasse,captcha);
-                }                
+                    flux = numTicket + nom + courriel + motDePasse + captcha;
+                    ticket = new Tickets(numTicket,nom,courriel,motDePasse,captcha);
+                }               
             }
-        }
-        catch(Exception ex){            
-        }
+        
+        
        
         TicketCaptchaReturn ticketCaptchaReturn = null;
        

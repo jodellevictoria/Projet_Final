@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ListesdelectureMusiques.findAll", query = "SELECT l FROM ListesdelectureMusiques l")
     , @NamedQuery(name = "ListesdelectureMusiques.findByListeDeLecture", query = "SELECT l FROM ListesdelectureMusiques l WHERE l.listesdelectureMusiquesPK.listeDeLecture = :listeDeLecture")
     , @NamedQuery(name = "ListesdelectureMusiques.findByMusique", query = "SELECT l FROM ListesdelectureMusiques l WHERE l.listesdelectureMusiquesPK.musique = :musique")
-    , @NamedQuery(name = "ListesdelectureMusiques.findByDate", query = "SELECT l FROM ListesdelectureMusiques l WHERE l.date = :date")})
+    , @NamedQuery(name = "ListesdelectureMusiques.findByDate", query = "SELECT l FROM ListesdelectureMusiques l WHERE l.date = :date")
+    , @NamedQuery(name = "ListesdelectureMusiques.findMusiquesByListeDeLecture", query = "SELECT l FROM ListesdelectureMusiques l WHERE l.listesdelectureMusiquesPK.listeDeLecture = :listeDeLecture")})
 public class ListesdelectureMusiques implements Serializable {
 
     private static final long serialVersionUID = 1L;
