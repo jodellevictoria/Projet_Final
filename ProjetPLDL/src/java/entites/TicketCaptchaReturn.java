@@ -1,7 +1,6 @@
 package entites;
  
 import java.util.Date;
-import sun.security.krb5.internal.Ticket;
  
  
 //@XmlRootElement       //only needed if we also want to generate XML

@@ -46,7 +46,7 @@ import session.GestionnaireUtilisateur;
 @Path("utilisateurs")
 public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
 
-    private HashMap<Integer, Ticket> tickets = new HashMap<Integer, Ticket>();
+    public HashMap<Integer, Ticket> tickets = new HashMap<Integer, Ticket>();
     
     @EJB
     private GestionnaireUtilisateur gestionnaireCommande;
@@ -106,6 +106,11 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
+    }
+    
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
     
     @GET
@@ -170,11 +175,6 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         return ticketReturn;
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    } 
-    
     
     @GET
     @Path("créer/{numTicket}/{captcha}")
