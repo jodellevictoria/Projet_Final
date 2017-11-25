@@ -6,10 +6,12 @@
 package entites.service;
 
 import entites.Musiques;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,4 +90,66 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
         return em;
     }
     
+    @GET
+    @Path("musiquesPubliques")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Musiques> musiquesPubliques() {
+        List<Musiques> musiques = new ArrayList<Musiques>();
+        
+        Query q = em.createNamedQuery("Musiques.findAll");
+        List<Musiques> allMusiques = new ArrayList<Musiques>();
+        
+        try{
+            allMusiques = (List<Musiques>) q.getResultList();
+            for(int i = 0; i < allMusiques.size(); i++){
+                if(allMusiques.get(i).getActive() == true && allMusiques.get(i).getPublique() == true){
+                    musiques.add(allMusiques.get(i));
+                }
+            }
+        }
+        catch(Exception ex){
+            
+        }
+        
+        return musiques;
+    }
+    
+    @GET
+    @Path("musiquePublique/{idMusique}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Musiques musiquePublique(@PathParam("idMusique") Integer idMusique) {
+        Musiques musique = null;
+        
+        Query q = em.createNamedQuery("Musiques.findById");
+        
+        try{
+            Musiques musiqueFound = (Musiques) q.getSingleResult();
+            if(musiqueFound != null){
+                if(musiqueFound.getActive() && musiqueFound.getPublique()){
+                    musique = musiqueFound;
+                }
+            }
+        }
+        catch(Exception ex){
+            
+        }
+        /*List<Musiques> musiques = new ArrayList<Musiques>();
+        
+        Query q = em.createNamedQuery("Musiques.findAll");
+        List<Musiques> allMusiques = new ArrayList<Musiques>();
+        
+        try{
+            allMusiques = (List<Musiques>) q.getResultList();
+            for(int i = 0; i < allMusiques.size(); i++){
+                if(allMusiques.get(i).getActive() == true && allMusiques.get(i).getPublique() == true){
+                    musiques.add(allMusiques.get(i));
+                }
+            }
+        }
+        catch(Exception ex){
+            
+        }*/
+        
+        return musique;
+    }
 }

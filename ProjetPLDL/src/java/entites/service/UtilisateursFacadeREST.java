@@ -134,9 +134,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         }
         
         if(util != null){
-           
-            //retour = util.getMotDePasse();
-
+          
             Random r = new Random();
             int Low = 0;
             int High = 1000;
@@ -171,6 +169,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         }
         else{
             retour = "-1";
+            ticketReturn = new TicketToReturn(-1,"-1");
         }
         
         return ticketReturn;
@@ -303,5 +302,40 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         }        
         return ticketCaptchaReturn;
        
+    }
+    
+    @PUT
+    @Path("modifierProfil/{noTicket}/{chaineConfirmation}/{idUtil}/{courriel}/{motDePasse}/{alias}/{avatar}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String modifierProfil(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, 
+            @PathParam("idUtil") Integer idUtil, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse,
+            @PathParam("alias") String alias, @PathParam("avatar") Integer avatar) {
+        String messageRetour = "";
+        Utilisateurs util = null;
+        Query q = em.createNamedQuery("Utilisateurs.findById");
+        q.setParameter("courriel", idUtil);
+        
+        try{
+            util = (Utilisateurs) q.getSingleResult();
+        }
+        catch(Exception ex){
+        }
+        
+        String chaineToCompare = tickets.get(noTicket).getChaineConfirmation();
+        if(chaineToCompare.equals(chaineConfirmation)){
+            util.setCourriel(courriel);
+            util.setAlias(alias);
+            util.setMotDePasse(motDePasse);
+            util.setAvatar(avatar);
+            super.edit(util);
+            messageRetour = "L'utilisateur a été modifié";
+        }
+        else{
+            messageRetour = "Erreur avec le ticket";
+        }
+        //super.edit(entity);
+        
+        return messageRetour;
     }
 }
