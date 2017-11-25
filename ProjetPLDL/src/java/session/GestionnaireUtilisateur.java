@@ -44,7 +44,7 @@ public class GestionnaireUtilisateur {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
    
-    //@PersistenceContext(unitName = "LaCollectionDeJojoJPAPU")
+    @PersistenceContext(unitName = "ProjetPLDLPU")
     private EntityManager em;
     @Resource
     private SessionContext context;
@@ -55,10 +55,10 @@ public class GestionnaireUtilisateur {
        
         try {
             Utilisateurs utilisateur = ajouterUtilisateur(courriel, motDePasse, alias, avatar, actif, date);            
-            return utilisateur.getId();
+            return 1;
         } catch (Exception e) {
             context.setRollbackOnly();
-            return 0;
+            return 10;
         }
     }
  

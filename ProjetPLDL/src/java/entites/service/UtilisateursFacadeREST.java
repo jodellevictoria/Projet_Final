@@ -276,7 +276,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
                     if(listTickets.get(i).getCourriel().compareTo(courriel)==0)
                     {
                         boolTempo=false;
-                        listTickets.get(i).setCaptcha(captcha);
+                        //listTickets.get(i).setCaptcha(captcha);
                         break;
                     }
                 }
@@ -293,7 +293,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
        
         if(ticket==null)
         {
-            ticketCaptchaReturn = new TicketCaptchaReturn("-1",ticket.getCaptcha());            
+            ticketCaptchaReturn = new TicketCaptchaReturn("-1","-1");            
         }
         else
         {

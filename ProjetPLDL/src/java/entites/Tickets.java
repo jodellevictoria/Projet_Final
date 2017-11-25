@@ -16,6 +16,7 @@ public class Tickets {
     public Tickets(String numTicket, String nom, String courriel, String motDePasse, String captcha) {
         this.numTicket = numTicket;
         this.nom = nom;
+        this.courriel = courriel;
         this.motDePasse = motDePasse;
         this.captcha = captcha;
     }
