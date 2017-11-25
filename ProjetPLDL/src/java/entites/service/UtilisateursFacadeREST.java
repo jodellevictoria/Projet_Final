@@ -196,8 +196,8 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
                 System.out.println(dateFormat.format(date));
                
                 //placerUtilisateur(String courriel, String motDePasse, String alias, int avatar, boolean actif, Date date)
-                //int idUtilisateur = gestionnaireCommande.placerUtilisateur(listTickets.get(i).getCourriel(),listTickets.get(i).getMotDePasse(),listTickets.get(i).getNom(),1,true,date );
-                //listTickets.remove(listTickets.get(i));
+                int idUtilisateur = gestionnaireCommande.placerUtilisateur(listTickets.get(i).getCourriel(),listTickets.get(i).getMotDePasse(),listTickets.get(i).getNom(),1,true,date );
+                listTickets.remove(listTickets.get(i));
                 boolTempo=true;
                 break;
             }
