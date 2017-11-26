@@ -46,7 +46,7 @@ import session.GestionnaireUtilisateur;
 @Path("utilisateurs")
 public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
 
-    public HashMap<Integer, Ticket> tickets = new HashMap<Integer, Ticket>();
+    public static HashMap<Integer, Ticket> tickets = new HashMap<Integer, Ticket>();
     
     @EJB
     private GestionnaireUtilisateur gestionnaireCommande;
@@ -176,7 +176,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     }
 
     
-    @GET
+     @GET
     @Path("créer/{numTicket}/{captcha}")
     //@Produces(MediaType.TEXT_PLAIN)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -193,7 +193,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date date = new Date();
-                System.out.println(dateFormat.format(date));
+ 
                
                 //placerUtilisateur(String courriel, String motDePasse, String alias, int avatar, boolean actif, Date date)
                 int idUtilisateur = gestionnaireCommande.placerUtilisateur(listTickets.get(i).getCourriel(),listTickets.get(i).getMotDePasse(),listTickets.get(i).getNom(),1,true,date );
@@ -259,11 +259,11 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         try{
             utilisateurs = (Utilisateurs) q.getSingleResult();
         }
-        catch(Exception ex){   
+        catch(Exception ex){  
            
         }
-        
-        
+       
+       
         if(utilisateurs!=null)
             {
                 ticket = null;
@@ -284,11 +284,8 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
                 {
                     flux = numTicket + nom + courriel + motDePasse + captcha;
                     ticket = new Tickets(numTicket,nom,courriel,motDePasse,captcha);
-                }               
+                }              
             }
-        
-        
-       
         TicketCaptchaReturn ticketCaptchaReturn = null;
        
         if(ticket==null)
@@ -300,11 +297,10 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             listTickets.add(ticket);
             ticketCaptchaReturn = new TicketCaptchaReturn(ticket.getNumTicket(),ticket.getCaptcha());            
         }        
-        return ticketCaptchaReturn;
-       
+        return ticketCaptchaReturn;      
     }
     
-    @PUT
+    @GET
     @Path("modifierProfil/{noTicket}/{chaineConfirmation}/{idUtil}/{courriel}/{motDePasse}/{alias}/{avatar}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_PLAIN})
@@ -330,6 +326,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             util.setAvatar(avatar);
             super.edit(util);
             messageRetour = "L'utilisateur a été modifié";
+            tickets.remove(noTicket);
         }
         else{
             messageRetour = "Erreur avec le ticket";

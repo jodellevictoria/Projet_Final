@@ -9,6 +9,8 @@ import entites.Listesdelecture;
 import entites.ListesdelectureMusiques;
 import entites.ListesdelectureMusiquesPK;
 import entites.Musiques;
+import entites.Ticket;
+import static entites.service.UtilisateursFacadeREST.tickets;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -135,6 +137,47 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
         }
         
         return lmPKList;
+    }
+    
+      @GET
+    @Path("modifierListeDeLecture/{noTicket}/{chaineConfirmation}/{Id}/{IdUtil}/{Nom}/{Publique}/{Active}")
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String modifierProfil(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,  
+            @PathParam("Id") Integer id,@PathParam("IdUtil") Integer IdUtil, @PathParam("Nom") String nom, @PathParam("Publique") boolean publique , @PathParam("Active") boolean active ) {
+        String messageRetour = "";
+        Listesdelecture listesdelecture = null;
+        Query q = em.createNamedQuery("Listesdelecture.findById");
+        q.setParameter("id", id);
+             
+        try{
+            listesdelecture = (Listesdelecture) q.getSingleResult();
+        }
+        catch(Exception ex){
+        }
+       
+        //String chaineToCompare = tickets.get(noTicket).getChaineConfirmation();
+        Ticket ticket = tickets.get(noTicket);
+         
+        if(IdUtil == listesdelecture.getProprietaire())
+        {
+            if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && IdUtil == ticket.getIdUtil()){            
+                listesdelecture.setNom(nom);
+                listesdelecture.setPublique(publique);
+                listesdelecture.setActive(active);
+                super.edit(listesdelecture);
+                messageRetour = "La musique a été modifié";
+            }
+            else{
+                messageRetour = "Erreur avec le ticket";
+            }
+        }
+        else
+        {
+            messageRetour = "c'est pas votre lsite de lecture";
+        }
+       
+        return messageRetour;
     }
     
 }
