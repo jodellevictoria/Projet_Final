@@ -4,13 +4,19 @@
  * and open the template in the editor.
  */
 package entites.service;
-
+ 
+import entites.Listesdelecture;
 import entites.ListesdelectureMusiques;
 import entites.ListesdelectureMusiquesPK;
+import entites.Musiques;
+import entites.Ticket;
+import static entites.service.UtilisateursFacadeREST.tickets;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,7 +27,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
-
+ 
 /**
  *
  * @author jodel
@@ -29,10 +35,10 @@ import javax.ws.rs.core.PathSegment;
 @Stateless
 @Path("listesdelecturemusiques")
 public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<ListesdelectureMusiques> {
-
+ 
     @PersistenceContext(unitName = "ProjetPLDLPU")
     private EntityManager em;
-
+ 
     private ListesdelectureMusiquesPK getPrimaryKey(PathSegment pathSegment) {
         /*
          * pathSemgent represents a URI path segment and any associated matrix parameters.
@@ -53,32 +59,32 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
         }
         return key;
     }
-
+ 
     public ListesdelectureMusiquesFacadeREST() {
         super(ListesdelectureMusiques.class);
     }
-
+ 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(ListesdelectureMusiques entity) {
         super.create(entity);
     }
-
+ 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") PathSegment id, ListesdelectureMusiques entity) {
         super.edit(entity);
     }
-
+ 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") PathSegment id) {
         entites.ListesdelectureMusiquesPK key = getPrimaryKey(id);
         super.remove(super.find(key));
     }
-
+ 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -86,31 +92,422 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
         entites.ListesdelectureMusiquesPK key = getPrimaryKey(id);
         return super.find(key);
     }
-
+ 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ListesdelectureMusiques> findAll() {
         return super.findAll();
     }
-
+ 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ListesdelectureMusiques> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
-
+ 
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+ 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+   
+   
+    @GET
+    @Path("ajouterMusiqueALaListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusique}")
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String ajouterMusiqueALaListe(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
+            @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique, @PathParam("idListeDeMusique") Integer idListeDeMusique) {
+       
+        String messageRetour = "empty";
+        Ticket ticket = tickets.get(noTicket);
+       
+       
+       
+        Musiques musique = null;
+        Query q = em.createNamedQuery("Musiques.findById");
+        q.setParameter("id", idMusique);
+        try{
+            musique = (Musiques) q.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+        Listesdelecture listesdelecture = null;
+        Query q2 = em.createNamedQuery("Listesdelecture.findById");
+        q2.setParameter("id", idListeDeMusique);
+        try{
+            listesdelecture = (Listesdelecture) q2.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+       
+        if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil())
+        {
+            if(musique==null || (musique.getActive() == false || musique.getPublique()==false))
+            {
+                messageRetour="musique introuvé ou inactive/privée";
+            }
+            else
+            {
+                if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
+                {
+                    messageRetour="liste de lecture introuvé ou ne vous appartien pas";
+                }
+                else
+                {
+                    ListesdelectureMusiquesPK listesdelectureMusiquesPK = new ListesdelectureMusiquesPK(idListeDeMusique,idMusique);
+                    ListesdelectureMusiques listesdelectureMusiques = new ListesdelectureMusiques();
+                    listesdelectureMusiques.setListesdelectureMusiquesPK(listesdelectureMusiquesPK);
+                    listesdelectureMusiques.setDate(new Date());
+                    em.persist(listesdelectureMusiques);
+                    messageRetour = "la musique a été ajoutée a la liste";
+                }
+            }
+        }
+        else{
+            messageRetour = "erreur avec le ticket";
+        }        
+        return messageRetour;
+    }
+   
+    @GET
+    @Path("supprimerMusiqueALaListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusique}")
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String supprimerMusiqueALaListe(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
+            @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique, @PathParam("idListeDeMusique") Integer idListeDeMusique) {
+       
+        String messageRetour = "empty";
+        Ticket ticket = tickets.get(noTicket);
+       
+       
+       
+        Musiques musique = null;
+        Query q = em.createNamedQuery("Musiques.findById");
+        q.setParameter("id", idMusique);
+        try{
+            musique = (Musiques) q.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+        Listesdelecture listesdelecture = null;
+        Query q2 = em.createNamedQuery("Listesdelecture.findById");
+        q2.setParameter("id", idListeDeMusique);
+        try{
+            listesdelecture = (Listesdelecture) q2.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+       
+        if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil())
+        {
+            if(musique==null || (musique.getActive() == false || musique.getPublique()==false))
+            {
+                messageRetour="musique introuvé ou inactive/privée";
+            }
+            else
+            {
+                if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
+                {
+                    messageRetour="liste de lecture introuvé ou ne vous appartien pas";
+                }
+                else
+                {
+                    ListesdelectureMusiquesPK listesdelectureMusiquesPK = new ListesdelectureMusiquesPK(idListeDeMusique,idMusique);
+                   
+                    List<ListesdelectureMusiques> listesdelectureMusiques = null;
+                    Query q3 = em.createNamedQuery("ListesdelectureMusiques.findByListeDeLecture");    
+                    q3.setParameter("listeDeLecture", idListeDeMusique);
+                    try{
+                        listesdelectureMusiques = (List<ListesdelectureMusiques> ) q3.getResultList();          
+                    }
+                    catch(Exception ex){            
+                    }
+                   
+                   
+                    boolean boolTempo=false;
+                    if(listesdelectureMusiques==null)                                        
+                    {
+                         messageRetour = "la liste de lecture ne contien pas de musique";
+                    }
+                    else
+                    {
+                        for(int i = 0; i<listesdelectureMusiques.size();i++)
+                        {
+                            if(listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getMusique()==listesdelectureMusiquesPK.getMusique() &&
+                                    listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getListeDeLecture()==listesdelectureMusiquesPK.getListeDeLecture())
+                            {
+                                boolTempo=true;
+                                break;
+                            }
+                        }
+                        if(boolTempo==true)
+                        {
+                            super.remove(super.find(listesdelectureMusiquesPK));
+                            messageRetour = "la musique a été supprimer de la liste";
+                        }
+                        else
+                        {
+                            messageRetour = "la musique n'appartien a aucune listede lecture";
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            messageRetour = "erreur avec le ticket";
+        }        
+        return messageRetour;
+    }
+   
+    @GET
+    @Path("changerMusiqueALaListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusiqueOld}/{idListeDeMusiqueNew}")
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String changerMusiqueALaListe(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
+            @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique, @PathParam("idListeDeMusiqueOld") Integer idListeDeMusiqueOld,
+            @PathParam("idListeDeMusiqueNew") Integer idListeDeMusiqueNew) {
+       
+        String messageRetour = "empty";
+        Ticket ticket = tickets.get(noTicket);
+       
+       
+       
+        Musiques musique = null;
+        Query q = em.createNamedQuery("Musiques.findById");
+        q.setParameter("id", idMusique);
+        try{
+            musique = (Musiques) q.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+        Listesdelecture listesdelecture = null;
+        Query q2 = em.createNamedQuery("Listesdelecture.findById");
+        q2.setParameter("id", idListeDeMusiqueOld);
+        try{
+            listesdelecture = (Listesdelecture) q2.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+       
+        if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil())
+        {
+            if(musique==null || (musique.getActive() == false || musique.getPublique()==false))
+            {
+                messageRetour="musique introuvé ou inactive/privée";
+            }
+            else
+            {
+                if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
+                {
+                    messageRetour="ancienne liste de lecture introuvé ou ne vous appartien pas";
+                }
+                else
+                {
+                    ListesdelectureMusiquesPK listesdelectureMusiquesPK = new ListesdelectureMusiquesPK(idListeDeMusiqueOld,idMusique);
+                   
+                    List<ListesdelectureMusiques> listesdelectureMusiques = null;
+                    Query q3 = em.createNamedQuery("ListesdelectureMusiques.findByListeDeLecture");    
+                    q3.setParameter("listeDeLecture", idListeDeMusiqueOld);
+                    try{
+                        listesdelectureMusiques = (List<ListesdelectureMusiques> ) q3.getResultList();          
+                    }
+                    catch(Exception ex){            
+                    }
+                   
+                   
+                    boolean boolTempo=false;
+                    if(listesdelectureMusiques==null)                                        
+                    {
+                         messageRetour = "l'ancienne liste de lecture ne contien pas de musique";
+                    }
+                    else
+                    {
+                        for(int i = 0; i<listesdelectureMusiques.size();i++)
+                        {
+                            if(listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getMusique()==listesdelectureMusiquesPK.getMusique() &&
+                                    listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getListeDeLecture()==listesdelectureMusiquesPK.getListeDeLecture())
+                            {
+                                boolTempo=true;
+                                break;
+                            }
+                        }
+                        if(boolTempo==true)
+                        {
+                           
+                           
+                            Listesdelecture listesdelecture2 = null;
+                            Query q4 = em.createNamedQuery("Listesdelecture.findById");
+                            q4.setParameter("id", idListeDeMusiqueNew);
+                            try{
+                                listesdelecture2 = (Listesdelecture) q4.getSingleResult();          
+                            }
+                            catch(Exception ex){            
+                            }
+                           
+                            if(listesdelecture2==null || listesdelecture2.getProprietaire() != idUser)
+                            {
+                                messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartien pas";
+                            }
+                            else
+                            {
+                                //JE DOIT TU ADD AVEC LA DATE ENPLUS????????
+                                super.remove(super.find(listesdelectureMusiquesPK));
+                                ListesdelectureMusiquesPK listesdelectureMusiquesPK2 = new ListesdelectureMusiquesPK(idListeDeMusiqueNew,idMusique);
+                                ListesdelectureMusiques listesdelectureMusiques2 = new ListesdelectureMusiques();
+                                listesdelectureMusiques2.setListesdelectureMusiquesPK(listesdelectureMusiquesPK2);
+                                listesdelectureMusiques2.setDate(new Date());
+                                em.persist(listesdelectureMusiques2);
+                                messageRetour = "la musique a été ajoutée a la nouvelle liste";
+                            }                          
+                           
+                        }
+                        else
+                        {
+                            messageRetour = "la musique n'appartien a aucune listede lecture";
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            messageRetour = "erreur avec le ticket";
+        }        
+        return messageRetour;
+    }
+   
+   
+    @GET
+    @Path("copierListeeALaListe/{noTicket}/{chaineConfirmation}/{idUser}/{idListeDeMusiqueOld}/{idListeDeMusiqueNew}")
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String copierListeeALaListe(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
+            @PathParam("idUser") Integer idUser, @PathParam("idListeDeMusiqueOld") Integer idListeDeMusiqueOld,
+            @PathParam("idListeDeMusiqueNew") Integer idListeDeMusiqueNew) {
+       
+        String messageRetour = "empty";
+        Ticket ticket = tickets.get(noTicket);
+       
+        Listesdelecture listesdelecture = null;
+        Query q2 = em.createNamedQuery("Listesdelecture.findById");
+        q2.setParameter("id", idListeDeMusiqueOld);
+        try{
+            listesdelecture = (Listesdelecture) q2.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+       
+        if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil())
+        {
+            if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
+            {
+                messageRetour="ancienne liste de lecture introuvé ou ne vous appartien pas";
+            }
+            else
+            {
+               
+ 
+                List<ListesdelectureMusiques> listesdelectureMusiques = null;
+                Query q3 = em.createNamedQuery("ListesdelectureMusiques.findByListeDeLecture");    
+                q3.setParameter("listeDeLecture", idListeDeMusiqueOld);
+                try{
+                    listesdelectureMusiques = (List<ListesdelectureMusiques> ) q3.getResultList();          
+                }
+                catch(Exception ex){            
+                }
+ 
+ 
+                if(listesdelectureMusiques==null)                                        
+                {
+                     messageRetour = "l'ancienne liste de lecture ne contien pas de musique";
+                }
+                else
+                {      
+                    Listesdelecture listesdelecture2 = null;
+                    Query q4 = em.createNamedQuery("Listesdelecture.findById");
+                    q4.setParameter("id", idListeDeMusiqueNew);
+                    try{
+                        listesdelecture2 = (Listesdelecture) q4.getSingleResult();          
+                    }
+                    catch(Exception ex){            
+                    }
+ 
+                    if(listesdelecture2==null || listesdelecture2.getProprietaire() != idUser)
+                    {
+                        messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartien pas";
+                    }
+                    else
+                    {
+                        //JE DOIT TU ADD AVEC LA DATE ENPLUS????????
+                        for(int i = 0; i<listesdelectureMusiques.size();i++)
+                        {  
+                            List<ListesdelectureMusiques> listesdelectureMusiques3 = null;
+                            Query q5 = em.createNamedQuery("ListesdelectureMusiques.findByListeDeLecture");    
+                            q5.setParameter("listeDeLecture", idListeDeMusiqueNew);
+                            try{
+                                listesdelectureMusiques3 = (List<ListesdelectureMusiques> ) q5.getResultList();          
+                            }
+                            catch(Exception ex){            
+                            }
+                           
+                            boolean boolTempo=true;
+                            if(listesdelectureMusiques3!=null)
+                            {                              
+                                for(int x = 0; x<listesdelectureMusiques3.size();x++)
+                                {
+                                    messageRetour=""+x;
+                                    if(listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getMusique()==listesdelectureMusiques3.get(x).getListesdelectureMusiquesPK().getMusique() )
+                                    {
+                                        boolTempo=false;
+                                        break;
+                                    }
+                                }
+                            }                          
+                           
+                            if(boolTempo==true || listesdelectureMusiques3==null)
+                            {
+                                ListesdelectureMusiquesPK listesdelectureMusiquesPK2 = new ListesdelectureMusiquesPK(idListeDeMusiqueNew,listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getMusique());
+                                ListesdelectureMusiques listesdelectureMusiques2 = new ListesdelectureMusiques();
+                                listesdelectureMusiques2.setListesdelectureMusiquesPK(listesdelectureMusiquesPK2);
+                                listesdelectureMusiques2.setDate(new Date());
+                                em.persist(listesdelectureMusiques2);
+                                messageRetour = "les musique(s) a ont été ajoutée(s) a la nouvelle liste";
+                            }                            
+                        }                        
+                    }            
+                }
+            }
+        }        
+        else{
+            messageRetour = "erreur avec le ticket";
+        }        
+       
+        if(messageRetour=="empty")
+        {
+            messageRetour="toutes les musiques de la vieille liste appartiennent deja a la nouvelles";
+        }
+        return messageRetour;
+    }
 }

@@ -304,22 +304,23 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     @Path("modifierProfil/{noTicket}/{chaineConfirmation}/{idUtil}/{courriel}/{motDePasse}/{alias}/{avatar}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_PLAIN})
-    public String modifierProfil(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, 
+    public String modifierProfil(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
             @PathParam("idUtil") Integer idUtil, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse,
             @PathParam("alias") String alias, @PathParam("avatar") Integer avatar) {
         String messageRetour = "";
         Utilisateurs util = null;
         Query q = em.createNamedQuery("Utilisateurs.findById");
-        q.setParameter("courriel", idUtil);
-        
+        q.setParameter("id", idUtil);
+       
         try{
             util = (Utilisateurs) q.getSingleResult();
         }
         catch(Exception ex){
         }
-        
-        String chaineToCompare = tickets.get(noTicket).getChaineConfirmation();
-        if(chaineToCompare.equals(chaineConfirmation)){
+       
+       
+        Ticket ticket = tickets.get(noTicket);
+        if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUtil == ticket.getIdUtil()){
             util.setCourriel(courriel);
             util.setAlias(alias);
             util.setMotDePasse(motDePasse);
@@ -332,7 +333,8 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             messageRetour = "Erreur avec le ticket";
         }
         //super.edit(entity);
-        
+       
         return messageRetour;
+        //return "asd";
     }
 }

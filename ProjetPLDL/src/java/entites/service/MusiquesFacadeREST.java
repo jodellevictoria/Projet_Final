@@ -142,13 +142,14 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     public List<Musiques> musiquesPubliques() {
         List<Musiques> musiques = new ArrayList<Musiques>();
         
-        Query q = em.createNamedQuery("Musiques.findAll");
+        Query q = em.createNamedQuery("Musiques.findByPublique");
+        q.setParameter("publique", true);
         List<Musiques> allMusiques = new ArrayList<Musiques>();
         
         try{
             allMusiques = (List<Musiques>) q.getResultList();
             for(int i = 0; i < allMusiques.size(); i++){
-                if(allMusiques.get(i).getActive() == true && allMusiques.get(i).getPublique() == true){
+                if(allMusiques.get(i).getActive()){
                     musiques.add(allMusiques.get(i));
                 }
             }
@@ -159,6 +160,28 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
         
         return musiques;
     }
+    
+    @GET
+    @Path("musiquePublique/{idMusique}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Musiques musiquePublique(@PathParam("idMusique") Integer idMusique) {
+        Musiques musiques = new Musiques();
+        
+        Query q = em.createNamedQuery("Musiques.findById");
+        q.setParameter("id", idMusique);
+        
+        try{
+            musiques = (Musiques) q.getSingleResult();
+            if(!musiques.getActive() || !musiques.getPublique()){
+                musiques = null;
+            }
+        }
+        catch(Exception ex){
+            
+        }
+        
+        return musiques;
+    }   
     
     @GET
     @Path("consulterMusique/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}")
