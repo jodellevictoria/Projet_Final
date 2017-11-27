@@ -115,6 +115,71 @@ and open the template in the editor.
                 });
                 
                 
+                //14,15
+                $("#btn1415").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/utilisateurs/modifierProfil/";
+                    var noTicket = $("#1415NoTicket").val();
+                    var confirmation = $("#1415Confirmation").val();
+                    var idUtil = $("#1415idUtil").val();
+                    
+                    var courriel = $("#1415Courriel").val();
+                    var motDePasse = $("#1415MotDePasse").val();
+                    var alias = $("#1415Alias").val();
+                    var avatar = $("#1415Avatar").val();
+                    
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + courriel + "/" + motDePasse + "/" + alias + "/" + avatar;
+                    
+                    $.getJSON(serviceFullChain,
+                    function(data){
+                        $("#1415Result").val(JSON.stringify(data));
+                        
+                    });
+                });
+                
+                //16
+                $("#btn16").on("click",function(event){
+                    var noTicket = $("#16NoTicket").val();
+                    var confirmation = $("#16Confirmation").val();
+                    var idUtil = $("#16idUtil").val();
+                    
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/creerListeDeLecture/";
+                    var nom = $("#16Nom").val();
+                    var publique = $("#16Publique").val();
+                    var active = $("#16Active").val();
+                    
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + nom + "/" + publique + "/" + active;
+                    
+                    $.getJSON(serviceFullChain,
+                    function(data){
+                        $("#16Result").val(JSON.stringify(data));
+                    });
+                    
+                });
+                
+                //17,18,19,20    
+                $("#btn7181920").on("click",function(event){
+                    var noTicket = $("#17181920NoTicket").val();
+                    var confirmation = $("#17181920Confirmation").val();
+                    var idUtil = $("#17181920idUtil").val();
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/voirUneListeDeLectureALui/";
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil;
+                    var nbMusiques = 0;
+                    
+                    $.getJSON(serveur + idListe,
+                    function(data){
+                        console.log(data);
+                        $.each(data, function(i, liste)
+                        {
+                            nbMusiques++;
+                            resultat += (JSON.stringify(liste));
+                        });
+                        $("#7181920NbMusiques").val(nbMusiques);
+                        $("#7181920Listes").val(JSON.stringify(data));
+                    });
+                });
+                
+                
+                
             });
             
             
@@ -251,7 +316,7 @@ and open the template in the editor.
                 
                 <div>
                     <h3>17,18,19,20</h3>
-                <div class="row">
+                    <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="17181920NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="17181920Confirmation" placeholder="Entrez une clé de confirmation"/></div>
                     </div>
@@ -260,9 +325,12 @@ and open the template in the editor.
                             <div class="col-sm-6"><button class="btn btn-info" id="btn7181920">Voir listes de l'utilisateur</button></div>
                         </div>
                         <br/>
-                        <div class="row">
-                            <div class="col-sm-8"><textarea class="form-control" type="text" rows="5" id="7181920Listes" placeholder="Résultats"></textarea></div>
-                        </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="7181920NbMusiques" placeholder="NbDeMusiques"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8"><textarea class="form-control" type="text" rows="5" id="7181920Listes" placeholder="Résultats"></textarea></div>
+                    </div>
                 </div>
                 
                 <div>
