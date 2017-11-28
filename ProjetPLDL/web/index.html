@@ -25,7 +25,7 @@ and open the template in the editor.
                
                 //Tickets
                 $("#btnGenererTicket").on("click",function(event){
-                    var serveur = "http://localhost:8080/ProjetPLDL/webresources/utilisateurs/GetTicket/";
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/utilisateurs/GetTicket/";
                     var courriel = $("#secCourriel").val();
                     console.log(courriel);
                     $.getJSON(serveur+courriel ,
@@ -41,7 +41,7 @@ and open the template in the editor.
                
                 //Creation utilisateur tikets
                 $("#btnGenererTicket2").on("click",function(event){
-                    var serveur = "http://localhost:8080/ProjetPLDL/webresources/utilisateurs/creer/";
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/utilisateurs/creer/";
                     var nom = $("#creMotDePasse").val();
                     var courriel = $("#creCourriel").val();
                     var motDePasse = $("#creMotDePasse").val();
@@ -69,16 +69,22 @@ and open the template in the editor.
                
                 //1,2      
                 $("#btn12").on("click",function(event){
-                    var serveur = "http://localhost:8080/ProjetPLDL/webresources/utilisateurs/creer/";
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/utilisateurs/creer/";
                     var noTicket = $("#creNoTicket").val();
                     var captcha = $("#creCaptcha").val();
                     console.log("dasd");
                     var serviceFullChain=serveur+noTicket+"/"+captcha;
                     console.log(serviceFullChain);
-                    $.getJSON(serviceFullChain,
-                    function(data){
-                       console.log("wtf");
-                       
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#12Result").val(JSON.stringify(data));
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
                     });
      
                         //$("#12Result").val(JSON.stringify(data));
@@ -87,7 +93,7 @@ and open the template in the editor.
                
                 //3,4,5
                 $("#btn345").on("click",function(event){
-                    var serveur = "http://localhost:8080/ProjetPLDL/webresources/listesdelecture/voirListeDeLecture";
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/voirListeDeLecture";
                     var nbListes = 0;              
                     var resultat = "";
                     $.getJSON(serveur ,
@@ -106,7 +112,7 @@ and open the template in the editor.
                
                 //6,7,8
                 $("#btn678").on("click",function(event){
-                    var serveur = "http://localhost:8080/ProjetPLDL/webresources/musiques/musiquesPubliques";
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/musiques/musiquesPubliques";
                     var nbMusiques = 0;              
                     var resultat = "";
                     $.getJSON(serveur ,
@@ -125,7 +131,7 @@ and open the template in the editor.
                
                 //9,10
                 $("#910btnVoirListe").on("click",function(event){
-                    var serveur = "http://localhost:8080/ProjetPLDL/webresources/listesdelecture/voirListeDeLecture/";
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/voirListeDeLecture/";
                     var idListe = $("#910idListe").val();
                     var resultat = "";
                     $.getJSON(serveur + idListe,
@@ -144,7 +150,7 @@ and open the template in the editor.
                
                 //11
                 $("#btn11").on("click",function(event){
-                    var serveur = "http://localhost:8080/ProjetPLDL/webresources/musiques/musiquePublique/";
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/musiques/musiquePublique/";
                     var idMusique = $("#11idMusique").val();
                     var resultat = "";
                     $.getJSON(serveur + idMusique,
@@ -163,7 +169,7 @@ and open the template in the editor.
                
                 //14,15
                 $("#btn1415").on("click",function(event){
-                    var service = "http://localhost:8080/ProjetPLDL/webresources/utilisateurs/modifierProfil/";
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/utilisateurs/modifierProfil/";
                     var noTicket = $("#1415NoTicket").val();
                     var confirmation = $("#1415Confirmation").val();
                     var idUtil = $("#1415idUtil").val();
@@ -172,13 +178,19 @@ and open the template in the editor.
                     var motDePasse = $("#1415MotDePasse").val();
                     var alias = $("#1415Alias").val();
                     var avatar = $("#1415Avatar").val();
-                   
+                   //modifierProfil/{noTicket}/{chaineConfirmation}/{idUtil}/{courriel}/{motDePasse}/{alias}/{avatar}
                     var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + courriel + "/" + motDePasse + "/" + alias + "/" + avatar;
-                   
-                    $.getJSON(serviceFullChain,
-                    function(data){
-                        $("#1415Result").val(JSON.stringify(data));
-                       
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#1415Result").val(JSON.stringify(data));
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
                     });
                 });
                
@@ -188,7 +200,7 @@ and open the template in the editor.
                     var confirmation = $("#16Confirmation").val();
                     var idUtil = $("#16idUtil").val();
                    
-                    var service = "http://localhost:8080/ProjetPLDL/webresources/listesdelecture/creerListeDeLecture/";
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/creerListeDeLecture/";
                     var nom = $("#16Nom").val();
                     var publique = $("#16Publique").val();
                     var active = $("#16Active").val();
@@ -207,7 +219,7 @@ and open the template in the editor.
                     var noTicket = $("#17181920NoTicket").val();
                     var confirmation = $("#17181920Confirmation").val();
                     var idUtil = $("#17181920idUtil").val();
-                    var service = "http://localhost:8080/ProjetPLDL/webresources/listesdelecture/voirUneListeDeLectureALui/";
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/voirUneListeDeLectureALui/";
                     var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil;
                     var nbMusiques = 0;
                    
@@ -226,7 +238,44 @@ and open the template in the editor.
                
                
                 //21
- 
+                /*<div>
+                    <h3>21</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="21NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="21Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="21idUtil" placeholder="idUtil"/></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn21">Modifier Liste</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="21Idliste" placeholder="idListe"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="21Nom" placeholder="Nom"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="21Publique" placeholder="Publique"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="21Active" placeholder="Active"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="21Result" placeholder="Resultat"/></div>
+                    </div>
+                   
+                </div>*/
+                $("#btn21").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/modifierListeDeLecture/";
+                    var noTicket = $("#21NoTicket").val();
+                    var confirmation = $("#21Confirmation").val();
+                    var idUtil = $("#21idUtil").val();
+                   
+                    var idListe = $("#21idListe").val();
+                    var nom = $("#21Nom").val();
+                    var publique = $("#21Publique").val();
+                    var active = $("#21Active").val();
+                   
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idListe + "/" + idUtil + "/" + nom + "/" + publique + "/" + active;
+                   
+                    $.getJSON(serviceFullChain,
+                    function(data){
+                        $("#21Result").val(JSON.stringify(data));
+                    });
+                });
+                
                
                 //22
                
@@ -416,9 +465,11 @@ and open the template in the editor.
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="21NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="21Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="21idUtil" placeholder="idUtil"/></div>
                         <div class="col-sm-4"><button class="btn btn-info" id="btn21">Modifier Liste</button></div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="21Idliste" placeholder="idListe"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="21Nom" placeholder="Nom"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="21Publique" placeholder="Publique"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="21Active" placeholder="Active"/></div>
