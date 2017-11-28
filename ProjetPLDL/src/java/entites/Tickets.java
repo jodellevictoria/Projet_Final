@@ -12,13 +12,23 @@ public class Tickets {
     private String courriel;    
     private String motDePasse;
     private String captcha;
+    private int avatar;
+
+    public void setAvatar(int avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getAvatar() {
+        return avatar;
+    }
  
-    public Tickets(String numTicket, String nom, String courriel, String motDePasse, String captcha) {
+    public Tickets(String numTicket, String nom, String courriel, String motDePasse, String captcha,int avatar) {
         this.numTicket = numTicket;
         this.nom = nom;
         this.courriel = courriel;
         this.motDePasse = motDePasse;
         this.captcha = captcha;
+        this.avatar = avatar;
     }
     public Tickets() {        
     }

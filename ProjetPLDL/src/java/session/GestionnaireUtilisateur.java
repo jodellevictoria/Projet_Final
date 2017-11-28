@@ -68,7 +68,6 @@ public class GestionnaireUtilisateur {
         utilisateur.setMotDePasse(motDePasse);
         utilisateur.setAlias(alias);
         utilisateur.setAvatar(avatar);
-        utilisateur.setAvatar(avatar);
         utilisateur.setActif(actif);
         utilisateur.setDate(date);
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();

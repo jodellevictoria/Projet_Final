@@ -82,6 +82,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
             musiqueAjout.setDate(new Date());
             em.persist(musiqueAjout);
             messageRetour = "Musique ajoutée";
+            tickets.remove(noTicket);
         }
         else{
             messageRetour = "Musique n'a pa été ajoutée.";
@@ -240,11 +241,11 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
                 tickets.remove(noTicket);
             }
             else{
-                messageRetour = "Erreur";
+                messageRetour = "Erreur : avec la validation du ticket";
             }
         }
         else{
-            messageRetour = "Erreur";
+            messageRetour = "Erreur: le ticket n'existe pas";
         }
         
         return messageRetour;
@@ -276,11 +277,11 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
                 tickets.remove(noTicket);
             }
             else{
-                messageRetour = "Erreur";
+                messageRetour = "Erreur: erreur de validation du ticket";
             }
         }
         else{
-            messageRetour = "Erreur";
+            messageRetour = "Erreur: le ticket n'existe pas";
         }
         
         return messageRetour;
@@ -321,7 +322,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
             tickets.remove(noTicket);
             }
             else{
-                messageRetour = "Erreur";
+                messageRetour = "Erreur: ticket n'existe pas";
             }
         }
         else
@@ -364,7 +365,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
        
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUtil == ticket.getIdUtil())
         {
-           
+           tickets.remove(noTicket);
         }  
         else
         {

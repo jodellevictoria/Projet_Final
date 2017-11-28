@@ -208,8 +208,10 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
  
                
                 //placerUtilisateur(String courriel, String motDePasse, String alias, int avatar, boolean actif, Date date)
-                int idUtilisateur = gestionnaireCommande.placerUtilisateur(listTickets.get(i).getCourriel(),listTickets.get(i).getMotDePasse(),listTickets.get(i).getNom(),1,true,date );
-                listTickets.remove(listTickets.get(i));
+                
+                
+                int idUtilisateur = gestionnaireCommande.placerUtilisateur(listTickets.get(i).getCourriel(),listTickets.get(i).getMotDePasse(),listTickets.get(i).getNom(),listTickets.get(i).getAvatar(),true,date );
+                
                 boolTempo=true;
                 break;
             }
@@ -229,13 +231,13 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
    
    
     @GET
-    @Path("creer/{nom}/{courriel}/{motDePasse}")
+    @Path("creer/{nom}/{courriel}/{motDePasse}/{avatar}")
     //@Produces(MediaType.TEXT_PLAIN)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes(MediaType.TEXT_PLAIN)
    
-    public TicketCaptchaReturn creeUser(@PathParam("nom") String nom, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse) {      
+    public TicketCaptchaReturn creeUser(@PathParam("nom") String nom, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse, @PathParam("avatar") int avatar  ) {      
        
         int width = 150;
         int height = 50;
@@ -325,40 +327,67 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
            
         }
        
-       
-        if(utilisateurs!=null)
-        {
-            ticket = null;
+        //le client
+        Query q2 = em.createNamedQuery("Utilisateurs.findByAlias");
+        q2.setParameter("alias", nom);
+        Utilisateurs utilisateurs2 = null;
+        try{
+            utilisateurs2 = (Utilisateurs) q2.getSingleResult();
         }
-        else
+        catch(Exception ex){  
+           
+        }
+        
+     
+       
+       
+        TicketCaptchaReturn ticketCaptchaReturn = null;
+        if(utilisateurs==null && utilisateurs2==null && avatar<=36)
         {
-            boolean boolTempo = true;                
+            boolean boolTempo = true;  
             for(int i =0;i<listTickets.size();i++ )
             {
-                if(listTickets.get(i).getCourriel().compareTo(courriel)==0)
+                if(listTickets.get(i).getCourriel().compareTo(courriel)==0 || listTickets.get(i).getNom().compareTo(nom)==0)
                 {
                     boolTempo=false;
-                    //listTickets.get(i).setCaptcha(captcha);
+                    listTickets.remove(listTickets.get(i));
                     break;
                 }
             }
-            if(boolTempo==true)
-            {
-                //flux = numTicket + nom + courriel + motDePasse + captcha2;
-                ticket = new Tickets(numTicket,nom,courriel,motDePasse,captcha2);
-            }              
-        }
-        TicketCaptchaReturn ticketCaptchaReturn = null;
-       
-        if(ticket==null)
-        {
-            ticketCaptchaReturn = new TicketCaptchaReturn("-1","-1","-1");            
+           
+            //flux = numTicket + nom + courriel + motDePasse + captcha2;
+            String motDePasseMD5 = "";
+            try{
+                MessageDigest m=MessageDigest.getInstance("MD5");
+                m.update(motDePasse.getBytes(),0,motDePasse.length());
+                //System.out.println("MD5: "+new BigInteger(1,m.digest()).toString(16));
+                motDePasseMD5 = new BigInteger(1,m.digest()).toString(16);
+                System.out.println(motDePasseMD5);
+            }
+            catch(Exception e){
+ 
+            }
+            //    public Tickets(String numTicket, String nom, String courriel, String motDePasse, String captcha) {
+            ticket = new Tickets(numTicket,nom,courriel,motDePasseMD5,captcha2,avatar);
+            listTickets.add(ticket);
+            ticketCaptchaReturn = new TicketCaptchaReturn(ticket.getNumTicket(),ticket.getCaptcha(),imageString);
         }
         else
         {
-            listTickets.add(ticket);
-            ticketCaptchaReturn = new TicketCaptchaReturn(ticket.getNumTicket(),ticket.getCaptcha(),imageString);            
-        }        
+            if(utilisateurs!=null)
+            {
+                ticketCaptchaReturn = new TicketCaptchaReturn("-1","-1","-1");
+            }
+            else if(utilisateurs2!=null)
+            {
+                ticketCaptchaReturn = new TicketCaptchaReturn("-2","-2","-2");
+            } 
+            else if(avatar>36){
+                ticketCaptchaReturn = new TicketCaptchaReturn("-3","-3","-3");
+            }
+                
+        }
+       
         return ticketCaptchaReturn;    
         //return imageString;
     }
@@ -411,4 +440,48 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         return messageRetour;
         //return "asd";
     }
+    
+    @GET
+    @Path("validerUtilisateur/{courriel}/{motDePasse}")
+    //@Produces(MediaType.TEXT_PLAIN)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String validerUtilisateur(@PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse) {
+        String retour = "";
+        Query q = em.createNamedQuery("Utilisateurs.findByCourriel");
+        q.setParameter("courriel", courriel);
+                
+        Utilisateurs util = null;
+        try{
+            util = (Utilisateurs) q.getSingleResult();
+        }
+        catch(Exception ex){
+            
+        }
+        String mdpMD5 = "";
+        try {
+            MessageDigest m=MessageDigest.getInstance("MD5");
+            m.update(motDePasse.getBytes(),0,motDePasse.length());
+            //System.out.println("MD5: "+new BigInteger(1,m.digest()).toString(16));
+            mdpMD5 = new BigInteger(1,m.digest()).toString(16);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UtilisateursFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(util != null){
+            if(util.getMotDePasse().equals(mdpMD5)){
+                retour = "connexion établie";
+            }
+            else{
+                retour = "Mot de passe invalide";
+            }
+        }
+        else{
+            retour = "courriel n'est pas dans la base";
+        }
+        
+        return retour;
+    }
+    
 }

@@ -173,6 +173,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                     listesdelectureMusiques.setDate(new Date());
                     em.persist(listesdelectureMusiques);
                     messageRetour = "la musique a été ajoutée a la liste";
+                    tickets.remove(noTicket);
                 }
             }
         }
@@ -225,7 +226,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
             {
                 if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
                 {
-                    messageRetour="liste de lecture introuvé ou ne vous appartien pas";
+                    messageRetour="liste de lecture introuvé ou ne vous appartient pas";
                 }
                 else
                 {
@@ -260,11 +261,12 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                         if(boolTempo==true)
                         {
                             super.remove(super.find(listesdelectureMusiquesPK));
-                            messageRetour = "la musique a été supprimer de la liste";
+                            messageRetour = "la musique a été supprimée de la liste";
+                            tickets.remove(noTicket);
                         }
                         else
                         {
-                            messageRetour = "la musique n'appartien a aucune listede lecture";
+                            messageRetour = "la musique n'appartient à aucune liste de lecture";
                         }
                     }
                 }
@@ -314,13 +316,13 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
         {
             if(musique==null || (musique.getActive() == false || musique.getPublique()==false))
             {
-                messageRetour="musique introuvé ou inactive/privée";
+                messageRetour="musique introuvée ou inactive/privée";
             }
             else
             {
                 if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
                 {
-                    messageRetour="ancienne liste de lecture introuvé ou ne vous appartien pas";
+                    messageRetour="ancienne liste de lecture introuvée ou ne vous appartient pas";
                 }
                 else
                 {
@@ -339,7 +341,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                     boolean boolTempo=false;
                     if(listesdelectureMusiques==null)                                        
                     {
-                         messageRetour = "l'ancienne liste de lecture ne contien pas de musique";
+                         messageRetour = "l'ancienne liste de lecture ne contient pas de musique";
                     }
                     else
                     {
@@ -367,7 +369,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                            
                             if(listesdelecture2==null || listesdelecture2.getProprietaire() != idUser)
                             {
-                                messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartien pas";
+                                messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartient pas";
                             }
                             else
                             {
@@ -379,12 +381,13 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                                 listesdelectureMusiques2.setDate(new Date());
                                 em.persist(listesdelectureMusiques2);
                                 messageRetour = "la musique a été ajoutée a la nouvelle liste";
+                                tickets.remove(noTicket);
                             }                          
                            
                         }
                         else
                         {
-                            messageRetour = "la musique n'appartien a aucune listede lecture";
+                            messageRetour = "la musique n'appartient a aucune listede lecture";
                         }
                     }
                 }
@@ -440,7 +443,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
             {
                 if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
                 {
-                    messageRetour="ancienne liste de lecture introuvé ou ne vous appartien pas";
+                    messageRetour="ancienne liste de lecture introuvé ou ne vous appartient pas";
                 }
                 else
                 {
@@ -459,7 +462,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                     boolean boolTempo=false;
                     if(listesdelectureMusiques==null)                                        
                     {
-                         messageRetour = "l'ancienne liste de lecture ne contien pas de musique";
+                         messageRetour = "l'ancienne liste de lecture ne contient pas de musique";
                     }
                     else
                     {
@@ -487,7 +490,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                            
                             if(listesdelecture2==null || listesdelecture2.getProprietaire() != idUser)
                             {
-                                messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartien pas";
+                                messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartient pas";
                             }
                             else
                             {
@@ -497,12 +500,13 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                                 listesdelectureMusiques2.setDate(new Date());
                                 em.persist(listesdelectureMusiques2);
                                 messageRetour = "la musique a été ajoutée a la nouvelle liste";
+                                tickets.remove(noTicket);
                             }                          
                            
                         }
                         else
                         {
-                            messageRetour = "la musique n'appartien a aucune listede lecture";
+                            messageRetour = "la musique n'appartient a aucune listede lecture";
                         }
                     }
                 }
@@ -541,7 +545,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
         {
             if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
             {
-                messageRetour="ancienne liste de lecture introuvé ou ne vous appartien pas";
+                messageRetour="ancienne liste de lecture introuvé ou ne vous appartient pas";
             }
             else
             {
@@ -559,7 +563,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
  
                 if(listesdelectureMusiques==null)                                        
                 {
-                     messageRetour = "l'ancienne liste de lecture ne contien pas de musique";
+                     messageRetour = "l'ancienne liste de lecture ne contient pas de musique";
                 }
                 else
                 {      
@@ -574,7 +578,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
  
                     if(listesdelecture2==null || listesdelecture2.getProprietaire() != idUser)
                     {
-                        messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartien pas";
+                        messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartient pas";
                     }
                     else
                     {
@@ -612,6 +616,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                                 listesdelectureMusiques2.setDate(new Date());
                                 em.persist(listesdelectureMusiques2);
                                 messageRetour = "les musique(s) a ont été ajoutée(s) a la nouvelle liste";
+                                tickets.remove(noTicket);
                             }                            
                         }                        
                     }            
@@ -624,7 +629,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
        
         if(messageRetour=="empty")
         {
-            messageRetour="toutes les musiques de la vieille liste appartiennent deja a la nouvelles";
+            messageRetour="toutes les musiques de la vieille liste appartiennent deja à la nouvelle";
         }
         return messageRetour;
     }

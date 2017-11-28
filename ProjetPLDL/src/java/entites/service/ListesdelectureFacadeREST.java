@@ -129,7 +129,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
                 }
             }
             else{
-                messageRetour = "Cette liste de lecture ne vous appartien pas";
+                messageRetour = "Cette liste de lecture ne vous appartient pas";
             }
         }
         else{
@@ -173,7 +173,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
                 }
             }
             else{
-                messageRetour = "Cette liste de lecture ne vous appartien pas";
+                messageRetour = "Cette liste de lecture ne vous appartient pas";
             }
         }
         else{
@@ -213,7 +213,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
        
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUtil == ticket.getIdUtil())
         {
-           
+           tickets.remove(noTicket);
         }  
         else
         {
@@ -252,11 +252,12 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
         }
         else if(listeDeLecture.getProprietaire() != idUtil)
         {
-            listeDeLecture = new Listesdelecture(1,1,"cette liste ne vous appartien pas",true,true,new Date());  
+            listeDeLecture = new Listesdelecture(1,1,"cette liste ne vous appartient pas",true,true,new Date());  
         }
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUtil == ticket.getIdUtil())
         {
-           
+                      tickets.remove(noTicket);
+
         }
         else
         {
@@ -355,7 +356,9 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
             listesdelecture.setActive(active);
             listesdelecture.setDate(new Date());
             em.persist(listesdelecture);
-            messageRetour = "la liste de lecture a eter ajoutée";
+            messageRetour = "la liste de lecture a eté ajoutée";
+                       tickets.remove(noTicket);
+
         }
         else{
             messageRetour = "la liste de lecture n'a pa été ajoutée.";
@@ -393,6 +396,8 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
                 listesdelecture.setActive(active);
                 super.edit(listesdelecture);
                 messageRetour = "La liste a été modifié";
+                           tickets.remove(noTicket);
+
             }
             else{
                 messageRetour = "Erreur avec le ticket";

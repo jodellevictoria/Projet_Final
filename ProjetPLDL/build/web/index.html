@@ -42,15 +42,15 @@ and open the template in the editor.
                 //Creation utilisateur tikets
                 $("#btnGenererTicket2").on("click",function(event){
                     var serveur = "http://localhost:18610/ProjetPLDL/webresources/utilisateurs/creer/";
-                    var nom = $("#creMotDePasse").val();
+                    var nom = $("#creNom").val();
                     var courriel = $("#creCourriel").val();
                     var motDePasse = $("#creMotDePasse").val();
-                   
+                    var avatar = $("#creAvatar").val();
                     console.log(courriel);
                     console.log(motDePasse);
                    
                    
-                    $.getJSON(serveur+nom+"/"+courriel+"/"+motDePasse ,
+                    $.getJSON(serveur+nom+"/"+courriel+"/"+motDePasse+"/"+avatar ,
                     function(data){
                         console.log(data);  
                         $.each(data, function(i, util)
@@ -58,7 +58,15 @@ and open the template in the editor.
                             console.log(util);
                             if(JSON.stringify(data)=='{"captcha":"-1","captchaImageFlux":"-1","numTicket":"-1"}')
                             {
-                                $("#creResult").val("l'utilisateur existe deja dans la BD");
+                                $("#creResult").val("un utilisateur avec le meme courriel existe déjà");
+                            }
+                            else if(JSON.stringify(data)=='{"captcha":"-2","captchaImageFlux":"-2","numTicket":"-2"}')
+                            {
+                                $("#creResult").val("un utilisateur avec le meme alias existe déjà");
+                            }
+                            else if(JSON.stringify(data)=='{"captcha":"-3","captchaImageFlux":"-3","numTicket":"-3"}')
+                            {
+                                $("#creResult").val("entréé un numero de 1 a 36 pour l'avatar");
                             }
                             else
                             {
@@ -91,6 +99,7 @@ and open the template in the editor.
                         type : "GET",
                         dataType : "text",
                         success : function(data) {
+                            
                             $("#12Result").val(JSON.stringify(data));
                         },
                         fail: function(data) {
@@ -177,6 +186,38 @@ and open the template in the editor.
                     });
                 });
                
+               //1213
+               /*<div>
+                    <h3>12,13</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="1213Courriel" placeholder="Courriel"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="1213MDP" placeholder="Mot de Passe"/></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn1213">Connexion</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="1213Result" placeholder="Resultat"/></div>
+                    </div>
+                </div>*/
+               $("#btn1213").on("click",function(event){
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/utilisateurs/validerUtilisateur/";
+                    var courriel = $("#1213Courriel").val();
+                    var mdp = $("#1213MDP").val();
+                    
+                    var serviceFullChain=serveur + courriel + "/" + mdp;
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            
+                            $("#1213Result").val(JSON.stringify(data));
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
+               
                
                 //14,15
                 $("#btn1415").on("click",function(event){
@@ -191,7 +232,7 @@ and open the template in the editor.
                     var avatar = $("#1415Avatar").val();
                    //modifierProfil/{noTicket}/{chaineConfirmation}/{idUtil}/{courriel}/{motDePasse}/{alias}/{avatar}
                     var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + courriel + "/" + motDePasse + "/" + alias + "/" + avatar;
-                    
+                    console.log(serviceFullChain);
                     $.ajax({
                         url : serviceFullChain,
                         type : "GET",
@@ -218,9 +259,21 @@ and open the template in the editor.
                    
                     var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + nom + "/" + publique + "/" + active;
                    
-                    $.getJSON(serviceFullChain,
+                    /*$.getJSON(serviceFullChain,
                     function(data){
                         $("#16Result").val(JSON.stringify(data));
+                    });*/
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#16Result").val(JSON.stringify(data));
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
                     });
                    
                 });
@@ -787,6 +840,7 @@ and open the template in the editor.
                     <div class="col-sm-6"><input class="form-control" type="text" id="creNom" placeholder="Entrez votre nom"/></div>
                     <div class="col-sm-6"><input class="form-control" type="text" id="creCourriel" placeholder="Entrez un courriel"/></div>
                     <div class="col-sm-6"><input class="form-control" type="text" id="creMotDePasse" placeholder="Entrez un mot de passe"/></div>
+                    <div class="col-sm-6"><input class="form-control" type="text" id="creAvatar" placeholder="Entrez le numero de votre avatar"/></div>
                     <div class="col-sm-6"><button class="btn btn-info" id="btnGenererTicket2">Générer un ticket</button></div>
                     <div id="img_preview" style="width:250px; height:250px;"> <img id="imgReal"> </div>
                 </div>
@@ -862,8 +916,17 @@ and open the template in the editor.
             </div>
             <div>
                 <h3>Fonctionalités privées</h3>
-                <div>12</div>
-                <div>13</div>
+                <div>
+                    <h3>12,13</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="1213Courriel" placeholder="Courriel"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="1213MDP" placeholder="Mot de Passe"/></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn1213">Connexion</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="1213Result" placeholder="Resultat"/></div>
+                    </div>
+                </div>
                
                 <div>
                     <h3>14,15</h3>
