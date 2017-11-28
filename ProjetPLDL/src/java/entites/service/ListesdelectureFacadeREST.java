@@ -118,7 +118,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
             if(listesdelecture.getProprietaire() == idUser)
             {
                 if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil() ){
-                    listesdelecture.setActive(publique);
+                    listesdelecture.setPublique(publique);
                     em.persist(listesdelecture);
                     messageRetour = (publique == true) ? "La liste de lecture est publique" : "La liste de lecture est privée";
                     tickets.remove(noTicket);
@@ -392,7 +392,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
                 listesdelecture.setPublique(publique);
                 listesdelecture.setActive(active);
                 super.edit(listesdelecture);
-                messageRetour = "La musique a été modifié";
+                messageRetour = "La liste a été modifié";
             }
             else{
                 messageRetour = "Erreur avec le ticket";
@@ -400,7 +400,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
         }
         else
         {
-            messageRetour = "c'est pas votre lsite de lecture";
+            messageRetour = "c'est pas votre liste de lecture";
         }
        
         return messageRetour;

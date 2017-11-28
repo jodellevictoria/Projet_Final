@@ -8,13 +8,25 @@ public class TicketCaptchaReturn {
  
     private String numTicket;      
     private String captcha;    
+    private String captchaImageFlux;
+ 
+   
  
  
-    public TicketCaptchaReturn(String numTicket, String captcha) {
+    public TicketCaptchaReturn(String numTicket, String captcha, String captchaImageFlux) {
         this.numTicket = numTicket;
         this.captcha = captcha;
+        this.captchaImageFlux = captchaImageFlux;
     }
     public TicketCaptchaReturn() {        
+    }
+   
+    public void setCaptchaImageFlux(String captchaImageFlux) {
+        this.captchaImageFlux = captchaImageFlux;
+    }
+ 
+    public String getCaptchaImageFlux() {
+        return captchaImageFlux;
     }
  
     public String getNumTicket() {

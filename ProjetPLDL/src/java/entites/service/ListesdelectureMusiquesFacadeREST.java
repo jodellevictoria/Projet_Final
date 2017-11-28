@@ -395,6 +395,124 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
         }        
         return messageRetour;
     }
+    
+    @GET
+    @Path("copierMusiqueAListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusiqueOld}/{idListeDeMusiqueNew}")
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String copierMusiqueAListe(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
+            @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique, @PathParam("idListeDeMusiqueOld") Integer idListeDeMusiqueOld,
+            @PathParam("idListeDeMusiqueNew") Integer idListeDeMusiqueNew) {
+       
+        String messageRetour = "empty";
+        Ticket ticket = tickets.get(noTicket);
+       
+       
+       
+        Musiques musique = null;
+        Query q = em.createNamedQuery("Musiques.findById");
+        q.setParameter("id", idMusique);
+        try{
+            musique = (Musiques) q.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+        Listesdelecture listesdelecture = null;
+        Query q2 = em.createNamedQuery("Listesdelecture.findById");
+        q2.setParameter("id", idListeDeMusiqueOld);
+        try{
+            listesdelecture = (Listesdelecture) q2.getSingleResult();          
+        }
+        catch(Exception ex){            
+        }
+       
+       
+       
+        if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil())
+        {
+            if(musique==null || (musique.getActive() == false || musique.getPublique()==false))
+            {
+                messageRetour="musique introuvé ou inactive/privée";
+            }
+            else
+            {
+                if(listesdelecture==null || listesdelecture.getProprietaire() != idUser)
+                {
+                    messageRetour="ancienne liste de lecture introuvé ou ne vous appartien pas";
+                }
+                else
+                {
+                    ListesdelectureMusiquesPK listesdelectureMusiquesPK = new ListesdelectureMusiquesPK(idListeDeMusiqueOld,idMusique);
+                   
+                    List<ListesdelectureMusiques> listesdelectureMusiques = null;
+                    Query q3 = em.createNamedQuery("ListesdelectureMusiques.findByListeDeLecture");    
+                    q3.setParameter("listeDeLecture", idListeDeMusiqueOld);
+                    try{
+                        listesdelectureMusiques = (List<ListesdelectureMusiques> ) q3.getResultList();          
+                    }
+                    catch(Exception ex){            
+                    }
+                   
+                   
+                    boolean boolTempo=false;
+                    if(listesdelectureMusiques==null)                                        
+                    {
+                         messageRetour = "l'ancienne liste de lecture ne contien pas de musique";
+                    }
+                    else
+                    {
+                        for(int i = 0; i<listesdelectureMusiques.size();i++)
+                        {
+                            if(listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getMusique()==listesdelectureMusiquesPK.getMusique() &&
+                                    listesdelectureMusiques.get(i).getListesdelectureMusiquesPK().getListeDeLecture()==listesdelectureMusiquesPK.getListeDeLecture())
+                            {
+                                boolTempo=true;
+                                break;
+                            }
+                        }
+                        if(boolTempo==true)
+                        {
+                           
+                           
+                            Listesdelecture listesdelecture2 = null;
+                            Query q4 = em.createNamedQuery("Listesdelecture.findById");
+                            q4.setParameter("id", idListeDeMusiqueNew);
+                            try{
+                                listesdelecture2 = (Listesdelecture) q4.getSingleResult();          
+                            }
+                            catch(Exception ex){            
+                            }
+                           
+                            if(listesdelecture2==null || listesdelecture2.getProprietaire() != idUser)
+                            {
+                                messageRetour="la nouvelle liste de lecture n'existe pas ou ne vous appartien pas";
+                            }
+                            else
+                            {
+                                ListesdelectureMusiquesPK listesdelectureMusiquesPK2 = new ListesdelectureMusiquesPK(idListeDeMusiqueNew,idMusique);
+                                ListesdelectureMusiques listesdelectureMusiques2 = new ListesdelectureMusiques();
+                                listesdelectureMusiques2.setListesdelectureMusiquesPK(listesdelectureMusiquesPK2);
+                                listesdelectureMusiques2.setDate(new Date());
+                                em.persist(listesdelectureMusiques2);
+                                messageRetour = "la musique a été ajoutée a la nouvelle liste";
+                            }                          
+                           
+                        }
+                        else
+                        {
+                            messageRetour = "la musique n'appartien a aucune listede lecture";
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            messageRetour = "erreur avec le ticket";
+        }        
+        return messageRetour;
+    }
    
    
     @GET

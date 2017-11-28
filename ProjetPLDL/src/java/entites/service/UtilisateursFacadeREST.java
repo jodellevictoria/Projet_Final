@@ -10,20 +10,31 @@ import entites.TicketCaptchaReturn;
 import entites.TicketToReturn;
 import entites.Tickets;
 import entites.Utilisateurs;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -37,6 +48,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import session.GestionnaireUtilisateur;
+import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -223,34 +235,84 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes(MediaType.TEXT_PLAIN)
    
-    public TicketCaptchaReturn creeUser(@PathParam("nom") String nom, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse) {
+    public TicketCaptchaReturn creeUser(@PathParam("nom") String nom, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse) {      
        
-        Random x = new Random();
-        int n = x.nextInt(1000000000);
+        int width = 150;
+        int height = 50;
+        List arrayList = new ArrayList();
+        String capcode = "abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMONOPQURSTUVWXYZ0123456789!@#$%&*";
+        for (int i = 1; i < capcode.length() - 1; i++) {
+            arrayList.add(capcode.charAt(i));
+        }
+        Collections.shuffle(arrayList);
+        Iterator itr = arrayList.iterator();
+        String s = "";
+        String s2 = "";
+        Object obj;
+        while (itr.hasNext()) {
+            obj = itr.next();
+            s = obj.toString();
+            s2 = s2 + s;
+        }
+        String s1 = s2.substring(0, 6);
+        char[] s3 = s1.toCharArray();
+        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        Font font = new Font("Georgia", Font.BOLD, 18);
+        g2d.setFont(font);
+        RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHints(rh);
+        GradientPaint gp = new GradientPaint(0, 0, Color.red, 0, height / 2, Color.black, true);
+        g2d.setPaint(gp);
+        g2d.fillRect(0, 0, width, height);
+        g2d.setColor(new Color(255, 153, 0));
+        Random r = new Random();
+        int index = Math.abs(r.nextInt()) % 5;
        
+       
+        String captcha2 = String.copyValueOf(s3);
+        //request.getSession().setAttribute("captcha", captcha2);
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < s3.length; i++) {
+            x += 10 + (Math.abs(r.nextInt()) % 15);
+            y = 20 + Math.abs(r.nextInt()) % 20;
+            g2d.drawChars(s3, i, 1, x, y);
+        }
+        g2d.dispose();
+        //response.setContentType("image/png");
+       
+       
+       
+        String imageString = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+ 
+        try {
+            ImageIO.write(bufferedImage, "png", bos);
+            byte[] imageBytes = bos.toByteArray();
+ 
+            BASE64Encoder encoder = new BASE64Encoder();
+            imageString = encoder.encode(imageBytes);
+ 
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //return imageString;
+       
+       
+       
+       
+       
+       
+        Random xx = new Random();
+        int n = xx.nextInt(1000000000);      
         String numTicket = n+"";      
         Tickets ticket =null ;
         String flux = "lol";
        
-       
-        int length = 7 + (Math.abs(x.nextInt()) % 3);
-    StringBuffer captchaStringBuffer = new StringBuffer();
-    for (int i = 0; i < length; i++) {
-            int baseCharNumber = Math.abs(x.nextInt()) % 62;
-            int charNumber = 0;
-            if (baseCharNumber < 26) {
-                charNumber = 65 + baseCharNumber;
-            }
-            else if (baseCharNumber < 52){
-                charNumber = 97 + (baseCharNumber - 26);
-            }
-            else {
-                charNumber = 48 + (baseCharNumber - 52);
-            }
-            captchaStringBuffer.append((char)charNumber);
-    }
-    String captcha = captchaStringBuffer.toString();
-       
+ 
        
         //le client
         Query q = em.createNamedQuery("Utilisateurs.findByCourriel");
@@ -265,39 +327,40 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
        
        
         if(utilisateurs!=null)
+        {
+            ticket = null;
+        }
+        else
+        {
+            boolean boolTempo = true;                
+            for(int i =0;i<listTickets.size();i++ )
             {
-                ticket = null;
-            }
-            else
-            {
-                boolean boolTempo = true;                
-                for(int i =0;i<listTickets.size();i++ )
+                if(listTickets.get(i).getCourriel().compareTo(courriel)==0)
                 {
-                    if(listTickets.get(i).getCourriel().compareTo(courriel)==0)
-                    {
-                        boolTempo=false;
-                        //listTickets.get(i).setCaptcha(captcha);
-                        break;
-                    }
+                    boolTempo=false;
+                    //listTickets.get(i).setCaptcha(captcha);
+                    break;
                 }
-                if(boolTempo==true)
-                {
-                    flux = numTicket + nom + courriel + motDePasse + captcha;
-                    ticket = new Tickets(numTicket,nom,courriel,motDePasse,captcha);
-                }              
             }
+            if(boolTempo==true)
+            {
+                //flux = numTicket + nom + courriel + motDePasse + captcha2;
+                ticket = new Tickets(numTicket,nom,courriel,motDePasse,captcha2);
+            }              
+        }
         TicketCaptchaReturn ticketCaptchaReturn = null;
        
         if(ticket==null)
         {
-            ticketCaptchaReturn = new TicketCaptchaReturn("-1","-1");            
+            ticketCaptchaReturn = new TicketCaptchaReturn("-1","-1","-1");            
         }
         else
         {
             listTickets.add(ticket);
-            ticketCaptchaReturn = new TicketCaptchaReturn(ticket.getNumTicket(),ticket.getCaptcha());            
+            ticketCaptchaReturn = new TicketCaptchaReturn(ticket.getNumTicket(),ticket.getCaptcha(),imageString);            
         }        
-        return ticketCaptchaReturn;      
+        return ticketCaptchaReturn;    
+        //return imageString;
     }
     
     @GET

@@ -306,7 +306,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
        
         Ticket ticket = tickets.get(noTicket);
        
-        String chaineToCompare = tickets.get(noTicket).getChaineConfirmation();
+        //String chaineToCompare = tickets.get(noTicket).getChaineConfirmation();
         if(IdUtil == musique.getProprietaire())
         {
             if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && IdUtil == ticket.getIdUtil()){            

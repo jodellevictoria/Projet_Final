@@ -48,19 +48,30 @@ and open the template in the editor.
                    
                     console.log(courriel);
                     console.log(motDePasse);
+                   
+                   
                     $.getJSON(serveur+nom+"/"+courriel+"/"+motDePasse ,
                     function(data){
-                        console.log(data);
+                        console.log(data);  
                         $.each(data, function(i, util)
                         {
                             console.log(util);
-                            if(JSON.stringify(data)=='{"captcha":"-1","numTicket":"-1"}')
+                            if(JSON.stringify(data)=='{"captcha":"-1","captchaImageFlux":"-1","numTicket":"-1"}')
                             {
                                 $("#creResult").val("l'utilisateur existe deja dans la BD");
                             }
                             else
                             {
-                                $("#creResult").val(JSON.stringify(data));
+                                $("#creResult").val(JSON.stringify(data.numTicket));
+                                var base64_string = data.captchaImageFlux;
+                                //var img = document.createElement("img");
+                                var img = document.getElementById("imgReal");
+                                // added `width` , `height` properties to `img` attributes
+                                //img.width = "250px";
+                                //img.height = "250px";
+                                img.src = "data:image/png;base64," + base64_string;
+                                var preview = document.getElementById("img_preview");
+                                preview.appendChild(img);                                
                             }                            
                         });
                     });
@@ -238,32 +249,14 @@ and open the template in the editor.
                
                
                 //21
-                /*<div>
-                    <h3>21</h3>
-                    <div class="row">
-                        <div class="col-sm-4"><input class="form-control" type="text" id="21NoTicket" placeholder="Entrez un # de ticket"/></div>
-                        <div class="col-sm-4"><input class="form-control" type="text" id="21Confirmation" placeholder="Entrez une clé de confirmation"/></div>
-                        <div class="col-sm-2"><input class="form-control" type="text" id="21idUtil" placeholder="idUtil"/></div>
-                        <div class="col-sm-4"><button class="btn btn-info" id="btn21">Modifier Liste</button></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-2"><input class="form-control" type="text" id="21Idliste" placeholder="idListe"/></div>
-                        <div class="col-sm-2"><input class="form-control" type="text" id="21Nom" placeholder="Nom"/></div>
-                        <div class="col-sm-2"><input class="form-control" type="text" id="21Publique" placeholder="Publique"/></div>
-                        <div class="col-sm-2"><input class="form-control" type="text" id="21Active" placeholder="Active"/></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4"><input class="form-control" type="text" id="21Result" placeholder="Resultat"/></div>
-                    </div>
-                   
-                </div>*/
                 $("#btn21").on("click",function(event){
                     var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/modifierListeDeLecture/";
                     var noTicket = $("#21NoTicket").val();
                     var confirmation = $("#21Confirmation").val();
                     var idUtil = $("#21idUtil").val();
                    
-                    var idListe = $("#21idListe").val();
+                    var idListe = $("#21Idliste").val();
+                    console.log(idListe);
                     var nom = $("#21Nom").val();
                     var publique = $("#21Publique").val();
                     var active = $("#21Active").val();
@@ -274,29 +267,496 @@ and open the template in the editor.
                     function(data){
                         $("#21Result").val(JSON.stringify(data));
                     });
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#21Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
                 });
                 
                
                 //22
-               
+                //http://localhost:18610/ProjetPLDL/webresources/listesdelecture/activerListeDeLecture/{noTi
+                $("#btn22").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/activerListeDeLecture/";
+                    var noTicket = $("#22NoTicket").val();
+                    var confirmation = $("#22Confirmation").val();
+                    var idUtil = $("#22idUtil").val();
+                   
+                    var idListe = $("#22Idliste").val();
+                    var active = $("#22Active").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idListe + "/" + active;
+                   console.log(serviceFullChain);
+                    /*$.getJSON(serviceFullChain,
+                    function(data){
+                        $("#22Result").val(JSON.stringify(data));
+                    });*/
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#22Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
                
                 //23
-               
+                $("#btn23").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecture/publierListeDeLecture/";
+                    var noTicket = $("#23NoTicket").val();
+                    var confirmation = $("#23Confirmation").val();
+                    var idUtil = $("#23idUtil").val();
+                   
+                    var idListe = $("#23Idliste").val();
+                    var publique = $("#23Publique").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idListe + "/" + publique;
+                    console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#23Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
+                
                 //24
+                $("#btn24").on("click",function(event){
+                    var noTicket = $("#24NoTicket").val();
+                    var confirmation = $("#24Confirmation").val();
+                    var idUtil = $("#24idUtil").val();
+                   
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/musiques/creerMusique/";
+                    var titre = $("#24Titre").val();
+                    var artiste = $("#24Artiste").val();
+                    var musique = $("#24Musique").val();
+                    var vignette = $("#24Vignette").val();
+                    var publique = $("#24Publique").val();
+                    var active = $("#24Publique").val();
+                   
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + titre + "/" + artiste + "/" + musique + "/" + vignette + "/" + publique + "/" + active;
+                   
+                    /*$.getJSON(serviceFullChain,
+                    function(data){
+                        $("#24Result").val(JSON.stringify(data));
+                    });*/
+                   //creerMusique/{noTicket}/{chaineConfirmation}/{idUser}/{titre}/{artiste}/{musique}/{vignette}/{publique}/{active}
+                   $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#24Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
                
-               
-                //25
-               
-                //26
+                //25,26                
+                $("#btn25261").on("click",function(event){
+                    var noTicket = $("#2526NoTicket").val();
+                    var confirmation = $("#2526Confirmation").val();
+                    var idUtil = $("#2526idUtil").val();
+                    
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/musiques/voirMusiquesALui/";
+                    //voirMusiquesALui/{noTicket}/{chaineConfirmation}/{idUtil}
+                    var resultat = "";
+                    $.getJSON(serveur + noTicket + "/" + confirmation + "/" + idUtil,
+                    function(data){
+                        //console.log(data);
+                        /*if(data != null){
+                            $("#2526ResultList").val(JSON.stringify(data));
+                        }
+                        else{
+                            $("#2526ResultList").val("Musique non disponible");
+                        }*/
+                        
+                        $.each(data, function(i, musique)
+                        {
+                            resultat += JSON.stringify(musique);
+                            //console.log(util);
+                        });
+                       $("#2526ResultList").val(resultat);
+                    });
+                });
+                
+                $("#btn25262").on("click",function(event){
+                    var noTicket = $("#2526NoTicket").val();
+                    var confirmation = $("#2526Confirmation").val();
+                    var idUtil = $("#2526idUtil").val();
+                    
+                    var serveur = "http://localhost:18610/ProjetPLDL/webresources/musiques/consulterMusique/";//{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}
+                    var idMusique = $("#2526IdMusique").val();
+                    //var resultat = "";
+                    $.getJSON(serveur + noTicket + "/" + confirmation + "/" + idUtil + "/" + idMusique,
+                    function(data){
+                        //console.log(data);
+                        if(data != null){
+                            $("#2526Result").val(JSON.stringify(data));
+                        }
+                        else{
+                            $("#2526Result").val("Musique non disponible");
+                        }
+                    });
+                });
+                
                 //27
+                /*<h3>27</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="27NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="27Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn27">Modifier Musique</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="27idUtil" placeholder="idUtil"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="27Titre" placeholder="Titre"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="27Artiste" placeholder="Artiste"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="27Musique" placeholder="Musique"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="27Vignette" placeholder="Vignette"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="27Publique" placeholder="Publique"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="27Active" placeholder="Active"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="27Result" placeholder="Resultat"/></div>
+                    </div>*/
+                $("#btn27").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/musiques/modifierMusique/";
+                    var noTicket = $("#27NoTicket").val();
+                    var confirmation = $("#27Confirmation").val();
+                    var idUtil = $("#27idUtil").val();
+                   
+                    var idMusique = $("#27IdMusique").val();
+                    var titre = $("#27Titre").val();
+                    var artiste = $("#27Artiste").val();
+                    var musique = $("#27Musique").val();
+                    var vignette = $("#27Vignette").val();
+                    var publique = $("#27Publique").val();
+                    var active = $("#27Active").val();
+                   //modifierMusique/{noTicket}/{chaineConfirmation}/{Id}/{IdUtil}/{Titre}/{Artiste}/{Musique}/{Vignette}/{Publique}/{Active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idMusique + "/" + idUtil + "/" + titre + "/" + artiste + "/" + musique + "/" + vignette + "/" + publique + "/" + active;
+                                      
+                    /*$.getJSON(serviceFullChain,
+                    function(data){
+                        $("#27Result").val(JSON.stringify(data));
+                    });*/
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#27Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
+
+                
+                
                 //28
+                /*<div>
+                    <h3>28</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="28NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="28Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn28">Activer/Désactiver Musique</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="28Active" placeholder="Active"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="28Result" placeholder="Resultat"/></div>
+                    </div>
+                </div>
+                */
+                $("#btn28").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/musiques/activerMusique/";
+                    //activerMusique/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{active}
+                    var noTicket = $("#28NoTicket").val();
+                    var confirmation = $("#28Confirmation").val();
+                    var idUtil = $("#28idUtil").val();
+                   
+                    var idListe = $("#28Idliste").val();
+                    var active = $("#28Active").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idListe + "/" + active;
+                   console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#28Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
+                
                 //29
+                /*<div>
+                    <h3>29</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="29NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="29Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn29">Publier/Ne pas publier Musique</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="29Publique" placeholder="Publique"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="29Result" placeholder="Resultat"/></div>
+                    </div>
+                </div>*/
+                $("#btn22").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/musiques/publierMusique/";
+                    var noTicket = $("#29NoTicket").val();
+                    var confirmation = $("#29Confirmation").val();
+                    var idUtil = $("#29idUtil").val();
+                   
+                    var idListe = $("#29Idliste").val();
+                    var active = $("#29Publique").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idListe + "/" + active;
+                   console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#29Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
                 //30
+                //http://localhost:18610/ProjetPLDL/webresources/listesdelecturemusiques/ajouterMusiqueALaListe/
+                //ajouterMusiqueALaListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusique}
+                /*<div>
+                    <h3>30</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="30NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="30Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn30">Ajouter Musique a liste de lecture</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="30idMusique" placeholder="idMusique"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="30idListe" placeholder="idListe"/></div>
+                    </div>
+                </div>*/
+                $("#btn30").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecturemusiques/ajouterMusiqueALaListe/";
+                    var noTicket = $("#30NoTicket").val();
+                    var confirmation = $("#30Confirmation").val();
+                    var idUtil = $("#30idUtil").val();
+                   
+                    var idMusique = $("#30idMusique").val();
+                    var idListe = $("#30idListe").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idMusique + "/" + idListe;
+                   console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#29Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
+                
                 //31
+                /*<div>
+                    <h3>31</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="31NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="31Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                       <div class="col-sm-4"><button class="btn btn-info" id="btn31">Retirer Musique de la liste de lecture</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="31idMusique" placeholder="idMusique"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="31idListe" placeholder="idListe"/></div>
+                    </div>
+                </div>*/
+                $("#btn31").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecturemusiques/supprimerMusiqueALaListe/";
+                    //{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusique}";
+                    var noTicket = $("#31NoTicket").val();
+                    var confirmation = $("#31Confirmation").val();
+                    var idUtil = $("#31idUtil").val();
+                   
+                    var idMusique = $("#31idMusique").val();
+                    var idListe = $("#31idListe").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idMusique + "/" + idListe;
+                   console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#31Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
+        
                 //32
+                /*<div>
+                    <h3>32</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="32NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="32Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                       <div class="col-sm-4"><button class="btn btn-info" id="btn32">Transférer Musique a liste de lecture</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="32idMusique" placeholder="idMusique"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="32idListe1" placeholder="idListe1"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="32idListe2" placeholder="idListe2"/></div>
+                    </div>
+                </div>*/
+        
+                $("#btn32").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecturemusiques/changerMusiqueALaListe/";
+                    //changerMusiqueALaListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusiqueOld}/{idListeDeMusiqueNew}
+                    var noTicket = $("#32NoTicket").val();
+                    var confirmation = $("#32Confirmation").val();
+                    var idUtil = $("#32idUtil").val();
+                   
+                    var idMusique = $("#32idMusique").val();
+                    var idListe1 = $("#32idListe1").val();
+                    var idListe2 = $("#32idListe2").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idMusique + "/" + idListe1 + "/" + idListe2;
+                   console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#31Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
+                          
                 //33
+                /*<div>
+                    <h3>33</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="33NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="33Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                    <div class="col-sm-4"><button class="btn btn-info" id="btn33">Copier Musique a une autre liste de lecture</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="33idMusique" placeholder="idMusique"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="33idListe1" placeholder="idListe1"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="33idListe2" placeholder="idListe2"/></div>
+                    </div>
+                </div>*/  
+                //copierMusiqueAListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{idListeDeMusiqueOld}/{idListeDeMusiqueNew}
+                $("#btn33").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecturemusiques/copierMusiqueAListe/";
+                    var noTicket = $("#33NoTicket").val();
+                    var confirmation = $("#33Confirmation").val();
+                    var idUtil = $("#33idUtil").val();
+                   
+                    var idMusique = $("#33idMusique").val();
+                    var idListe1 = $("#33idListe1").val();
+                    var idListe2 = $("#33idListe2").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idMusique + "/" + idListe1 + "/" + idListe2;
+                   console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#33Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
                 //34
-               
+               /*<div>
+                    <h3>34</h3>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="34NoTicket" placeholder="Entrez un # de ticket"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="34Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                    <div class="col-sm-4"><button class="btn btn-info" id="btn34">Copier Musiques d'une liste à une autre liste de lecture</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="34idListe1" placeholder="idListe1"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="34idListe2" placeholder="idListe2"/></div>
+                    </div>
+                </div>*/
+        
+                $("#btn34").on("click",function(event){
+                    var service = "http://localhost:18610/ProjetPLDL/webresources/listesdelecturemusiques/copierListeeALaListe/";
+                    //copierListeeALaListe/{noTicket}/{chaineConfirmation}/{idUser}/{idListeDeMusiqueOld}/{idListeDeMusiqueNew}
+                    var noTicket = $("#34NoTicket").val();
+                    var confirmation = $("#34Confirmation").val();
+                    var idUtil = $("#34idUtil").val();
+                   
+                    var idListe1 = $("#34idListe1").val();
+                    var idListe2 = $("#34idListe2").val();
+                   //{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}
+                    var serviceFullChain = service + noTicket + "/" + confirmation + "/" + idUtil + "/" + idListe1 + "/" + idListe2;
+                   console.log(serviceFullChain);
+                    
+                    $.ajax({
+                        url : serviceFullChain,
+                        type : "GET",
+                        dataType : "text",
+                        success : function(data) {
+                            $("#34Result").val(data);
+                        },
+                        fail: function(data) {
+                            alert( "Vous n'êtes pas connecté au serveur" );
+                        }
+                    });
+                });
                
             });
            
@@ -328,6 +788,7 @@ and open the template in the editor.
                     <div class="col-sm-6"><input class="form-control" type="text" id="creCourriel" placeholder="Entrez un courriel"/></div>
                     <div class="col-sm-6"><input class="form-control" type="text" id="creMotDePasse" placeholder="Entrez un mot de passe"/></div>
                     <div class="col-sm-6"><button class="btn btn-info" id="btnGenererTicket2">Générer un ticket</button></div>
+                    <div id="img_preview" style="width:250px; height:250px;"> <img id="imgReal"> </div>
                 </div>
                 <br/>
                 <div class="row">
@@ -484,9 +945,11 @@ and open the template in the editor.
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="22NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="22Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="22idUtil" placeholder="idUtil"/></div>
                         <div class="col-sm-4"><button class="btn btn-info" id="btn22">Activer/Désactiver Liste</button></div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="22Idliste" placeholder="idListe"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="22Active" placeholder="Active"/></div>
                     </div>
                     <div class="row">
@@ -498,9 +961,11 @@ and open the template in the editor.
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="23NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="23Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="23idUtil" placeholder="idUtil"/></div>
                         <div class="col-sm-4"><button class="btn btn-info" id="btn23">Publier/Ne pas publier Liste</button></div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="23Idliste" placeholder="idListe"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="23Publique" placeholder="Publique"/></div>
                     </div>
                     <div class="row">
@@ -532,15 +997,16 @@ and open the template in the editor.
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="2526NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="2526Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="2526idUtil" placeholder="idUtil"/></div>
                     </div>
                     <div class="row">                        
-                        <div class="col-sm-4"><button class="btn btn-info" id="btn2526">Voir Musiques</button></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn25261">Voir Musiques</button></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="2526ResultList" placeholder="Resultat"/></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="2526IdMusique" placeholder="IdMusique"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="2526Result" placeholder="Resultat"/></div>
-                        <div class="col-sm-4"><button class="btn btn-info" id="btn2526">Voir Musique</button></div>
+                        <div class="col-sm-4"><button class="btn btn-info" id="btn25262">Voir Musique</button></div>
                     </div>
                 </div>
                 <div>
@@ -552,6 +1018,7 @@ and open the template in the editor.
                     </div>
                     <div class="row">
                         <div class="col-sm-2"><input class="form-control" type="text" id="27idUtil" placeholder="idUtil"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="27IdMusique" placeholder="IdMusique"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="27Titre" placeholder="Titre"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="27Artiste" placeholder="Artiste"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="27Musique" placeholder="Musique"/></div>
@@ -568,9 +1035,11 @@ and open the template in the editor.
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="28NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="28Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="28idUtil" placeholder="idUtil"/></div>
                         <div class="col-sm-4"><button class="btn btn-info" id="btn28">Activer/Désactiver Musique</button></div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="28Idliste" placeholder="idListe"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="28Active" placeholder="Active"/></div>
                     </div>
                     <div class="row">
@@ -582,9 +1051,11 @@ and open the template in the editor.
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="29NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="29Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="29idUtil" placeholder="idUtil"/></div>
                         <div class="col-sm-4"><button class="btn btn-info" id="btn29">Publier/Ne pas publier Musique</button></div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-2"><input class="form-control" type="text" id="29Idliste" placeholder="idListe"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="29Publique" placeholder="Publique"/></div>
                     </div>
                     <div class="row">
@@ -596,30 +1067,39 @@ and open the template in the editor.
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="30NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="30Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="30idUtil" placeholder="idUtil"/></div>
                         <div class="col-sm-4"><button class="btn btn-info" id="btn30">Ajouter Musique a liste de lecture</button></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2"><input class="form-control" type="text" id="30idMusique" placeholder="idMusique"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="30idListe" placeholder="idListe"/></div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="30Result" placeholder="Resultat"/></div>
+                    </div>
                 </div>
                 <div>
                     <h3>31</h3>
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="31NoTicket" placeholder="Entrez un # de ticket"/></div>
-                        <div class="col-sm-4"><input class="form-control" type="text" id="31Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="31Confirmation" placeholder="Entrez une clé de confirmation"/></div>                        
+                        <div class="col-sm-2"><input class="form-control" type="text" id="31idUtil" placeholder="idUtil"/></div>
                        <div class="col-sm-4"><button class="btn btn-info" id="btn31">Retirer Musique de la liste de lecture</button></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2"><input class="form-control" type="text" id="31idMusique" placeholder="idMusique"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="31idListe" placeholder="idListe"/></div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="31Result" placeholder="Resultat"/></div>
+                    </div>
                 </div>
                 <div>
                     <h3>32</h3>
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="32NoTicket" placeholder="Entrez un # de ticket"/></div>
-                        <div class="col-sm-4"><input class="form-control" type="text" id="32Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-4"><input class="form-control" type="text" id="32Confirmation" placeholder="Entrez une clé de confirmation"/></div>                        
+                        <div class="col-sm-2"><input class="form-control" type="text" id="32idUtil" placeholder="idUtil"/></div>
                        <div class="col-sm-4"><button class="btn btn-info" id="btn32">Transférer Musique a liste de lecture</button></div>
                     </div>
                     <div class="row">
@@ -627,12 +1107,16 @@ and open the template in the editor.
                         <div class="col-sm-2"><input class="form-control" type="text" id="32idListe1" placeholder="idListe1"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="32idListe2" placeholder="idListe2"/></div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="32Result" placeholder="Resultat"/></div>
+                    </div>
                 </div>
                 <div>
                     <h3>33</h3>
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="33NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="33Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="33idUtil" placeholder="idUtil"/></div>
                     <div class="col-sm-4"><button class="btn btn-info" id="btn33">Copier Musique a une autre liste de lecture</button></div>
                     </div>
                     <div class="row">
@@ -640,17 +1124,24 @@ and open the template in the editor.
                         <div class="col-sm-2"><input class="form-control" type="text" id="33idListe1" placeholder="idListe1"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="33idListe2" placeholder="idListe2"/></div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="33Result" placeholder="Resultat"/></div>
+                    </div>
                 </div>            
                 <div>
                     <h3>34</h3>
                     <div class="row">
                         <div class="col-sm-4"><input class="form-control" type="text" id="34NoTicket" placeholder="Entrez un # de ticket"/></div>
                         <div class="col-sm-4"><input class="form-control" type="text" id="34Confirmation" placeholder="Entrez une clé de confirmation"/></div>
+                        <div class="col-sm-2"><input class="form-control" type="text" id="34idUtil" placeholder="idUtil"/></div>
                     <div class="col-sm-4"><button class="btn btn-info" id="btn34">Copier Musiques d'une liste à une autre liste de lecture</button></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2"><input class="form-control" type="text" id="34idListe1" placeholder="idListe1"/></div>
                         <div class="col-sm-2"><input class="form-control" type="text" id="34idListe2" placeholder="idListe2"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><input class="form-control" type="text" id="34Result" placeholder="Resultat"/></div>
                     </div>
                 </div>
             </div>
