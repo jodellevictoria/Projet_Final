@@ -335,4 +335,45 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
         //return "wut";
     }
     
+    @GET
+    @Path("voirMusiquesALui/{noTicket}/{chaineConfirmation}/{idUtil}")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    public List<Musiques> voirMusiquesALui(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,@PathParam("idUtil") Integer idUtil) {
+        //List<Musiques> musiquesInPlaylist = new ArrayList<Musiques>();
+       
+        List<Musiques> musiques = new ArrayList<Musiques>();
+        Query q = em.createNamedQuery("Musiques.findByProprietaire");
+        q.setParameter("proprietaire", idUtil);
+       
+        musiques=null;
+       
+        try{
+            musiques = (List<Musiques>) q.getResultList();
+        }
+        catch(Exception ex){            
+        }
+               
+        Ticket ticket = tickets.get(noTicket);
+        if(musiques==null)
+        {
+            Musiques l = new Musiques(1,1,"vous n'avez pas de liste","vous n'avez pas de liste","vous n'avez pas de liste","vous n'avez pas de liste",true,true,new Date());  
+            musiques= new ArrayList<Musiques>();
+            musiques.add(l);
+        }
+       
+        if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUtil == ticket.getIdUtil())
+        {
+           
+        }  
+        else
+        {
+            Musiques l = new Musiques(1,1,"erreur avec le ticket","erreur avec le ticket","erreur avec le ticket","erreur avec le ticket",true,true,new Date());  
+            musiques= new ArrayList<Musiques>();
+            musiques.add(l);
+           
+        }
+        return musiques;
+    }
+    
 }

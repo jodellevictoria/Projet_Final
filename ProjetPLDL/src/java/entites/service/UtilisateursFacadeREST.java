@@ -177,7 +177,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
 
     
      @GET
-    @Path("créer/{numTicket}/{captcha}")
+    @Path("creer/{numTicket}/{captcha}")
     //@Produces(MediaType.TEXT_PLAIN)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -217,7 +217,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
    
    
     @GET
-    @Path("créer/{nom}/{courriel}/{motDePasse}")
+    @Path("creer/{nom}/{courriel}/{motDePasse}")
     //@Produces(MediaType.TEXT_PLAIN)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -323,7 +323,18 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUtil == ticket.getIdUtil()){
             util.setCourriel(courriel);
             util.setAlias(alias);
-            util.setMotDePasse(motDePasse);
+            String motDePasseMD5 = "";
+            try{
+                MessageDigest m=MessageDigest.getInstance("MD5");
+                m.update(motDePasse.getBytes(),0,motDePasse.length());
+                //System.out.println("MD5: "+new BigInteger(1,m.digest()).toString(16));
+                motDePasseMD5 = new BigInteger(1,m.digest()).toString(16);
+            }
+            catch(Exception e){
+                
+            }
+                
+            util.setMotDePasse(motDePasseMD5);
             util.setAvatar(avatar);
             super.edit(util);
             messageRetour = "L'utilisateur a été modifié";
