@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ProjetPLDL</string>
+    <string name="title_musique_list">Musiques</string>
+    <string name="title_musique_detail">Musique Detail</string>
+</resources>
