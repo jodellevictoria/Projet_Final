@@ -1,10 +1,12 @@
-package jvpg.cgodin.qc.ca.projetpldl;
+package jvpg.cgodin.qc.ca.projetpldl.Public;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+
+import jvpg.cgodin.qc.ca.projetpldl.R;
 
 /**
  * An activity representing a single Musique detail screen. This

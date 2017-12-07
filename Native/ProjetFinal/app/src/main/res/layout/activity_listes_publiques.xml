@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jvpg.cgodin.qc.ca.projetpldl.ListesPubliquesActivity">
+    tools:context="jvpg.cgodin.qc.ca.projetpldl.Public.ListesPubliquesActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listesPubliques"

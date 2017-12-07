@@ -130,7 +130,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     @GET
     @Path("GetTicket/{Utilisateur}")
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    @Produces({MediaType.APPLICATION_JSON} )
     public TicketToReturn getTicket(@PathParam("Utilisateur") String utilisateur){
         String retour = "";
         Query q = em.createNamedQuery("Utilisateurs.findByCourriel");
@@ -193,8 +193,8 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
      @GET
     @Path("creer/{numTicket}/{captcha}")
     //@Produces(MediaType.TEXT_PLAIN)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    //@Consumes({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.TEXT_PLAIN)
     public String confirmer(@PathParam("numTicket") String numTicket, @PathParam("captcha") String captcha) {
         boolean boolTempo=false;
@@ -229,7 +229,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     @GET
     @Path("creer/{nom}/{courriel}/{motDePasse}/{avatar}")
     //@Produces(MediaType.TEXT_PLAIN)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes(MediaType.TEXT_PLAIN)
    
@@ -389,7 +389,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     
     @GET
     @Path("modifierProfil/{noTicket}/{chaineConfirmation}/{idUtil}/{courriel}/{motDePasse}/{alias}/{avatar}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_PLAIN})
     public String modifierProfil(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
             @PathParam("idUtil") Integer idUtil, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse,
@@ -445,7 +445,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     @GET
     @Path("validerUtilisateur/{courriel}/{motDePasse}")
     //@Produces(MediaType.TEXT_PLAIN)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes(MediaType.TEXT_PLAIN)
     public String validerUtilisateur(@PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse) {
@@ -482,9 +482,9 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             if(util.getMotDePasse().equals(mdpMD5)){
                 //Logged in
                 retour = "{\"result\":1,\"message\":\"Connexion établie\","
-                        + "\"utilisateur\":{\"courriel\""+ util.getCourriel() +",\"motdepasse\":\""+util.getMotDePasse()+"\""
+                        + "\"utilisateur\":{\"id\":"+ util.getId()+",\"courriel\":\""+ util.getCourriel() +"\",\"motdepasse\":\""+util.getMotDePasse()+"\""
                         + ",\"alias\":\""+util.getAlias()+"\",\"avatar\":\""+util.getAvatar()+"\""
-                        + ",\"actif\":"+util.getActif()+",\"date\":"+util.getDate()+"}}";
+                        + ",\"actif\":"+util.getActif()+",\"date\":\""+util.getDate()+"\"}}";
             }
             else{
                 //MDP Invalide

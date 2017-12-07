@@ -140,7 +140,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     
     @GET
     @Path("musiquesPubliques")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
     public List<Musiques> musiquesPubliques() {
         List<Musiques> musiques = new ArrayList<Musiques>();
         
@@ -165,7 +165,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     
     @GET
     @Path("musiquePublique/{idMusique}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
     public Musiques musiquePublique(@PathParam("idMusique") Integer idMusique) {
         Musiques musiques = new Musiques();
         
@@ -187,7 +187,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     
     @GET
     @Path("consulterMusique/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
     public Musiques musiquePublique(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, 
             @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique) {
         Musiques musique = null;
@@ -211,7 +211,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     
     @GET
     @Path("activerMusique/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{active}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
     public String activerMusique(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, 
             @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique, @PathParam("active") boolean active) {
 
@@ -258,7 +258,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     
     @GET
     @Path("publierMusique/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}/{publique}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
     public String publierMusique(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, 
             @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique, @PathParam("publique") boolean publique) {
         
@@ -375,7 +375,7 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     @GET
     @Path("voirMusiquesALui/{noTicket}/{chaineConfirmation}/{idUtil}")
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    @Produces({ MediaType.APPLICATION_JSON} )
     public List<Musiques> voirMusiquesALui(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,@PathParam("idUtil") Integer idUtil) {
         //List<Musiques> musiquesInPlaylist = new ArrayList<Musiques>();
         List<Musiques> musiques = new ArrayList<Musiques>();

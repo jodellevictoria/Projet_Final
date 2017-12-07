@@ -21,19 +21,20 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".CreerUtilisateurActivity" />
         <activity
-            android:name=".MusiquePubliqueListActivity"
+            android:name=".Public.MusiquePubliqueListActivity"
             android:label="@string/title_musique_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MusiquePubliqueDetailActivity"
+            android:name=".Public.MusiquePubliqueDetailActivity"
             android:label="@string/title_musique_detail"
-            android:parentActivityName=".MusiquePubliqueListActivity"
+            android:parentActivityName=".Public.MusiquePubliqueListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="jvpg.cgodin.qc.ca.projetpldl.MusiquePubliqueListActivity" />
+                android:value="jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueListActivity" />
         </activity>
-        <activity android:name=".ListesPubliquesActivity"></activity>
+        <activity android:name=".Public.ListesPubliquesActivity" />
+        <activity android:name=".Public.ModifierProfilActivity"></activity>
     </application>
 
 </manifest>

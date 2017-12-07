@@ -1,4 +1,4 @@
-package jvpg.cgodin.qc.ca.projetpldl;
+package jvpg.cgodin.qc.ca.projetpldl.Public;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import jvpg.cgodin.qc.ca.projetpldl.R;
 import jvpg.cgodin.qc.ca.projetpldl.entities.ListeDeLecture;
 
 public class ListesPubliquesActivity extends AppCompatActivity {

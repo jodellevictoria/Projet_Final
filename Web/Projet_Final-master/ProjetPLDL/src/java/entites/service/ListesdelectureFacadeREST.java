@@ -98,7 +98,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
    
     @GET
     @Path("publierListeDeLecture/{noTicket}/{chaineConfirmation}/{idUser}/{idListeDeLecture}/{publique}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public String publierListeDeLecture(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
             @PathParam("idUser") Integer idUser, @PathParam("idListeDeLecture") Integer idListeDeLecture, @PathParam("publique") boolean publique) {
 
@@ -153,7 +153,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
    
     @GET
     @Path("activerListeDeLecture/{noTicket}/{chaineConfirmation}/{idUser}/{idListeDeLecture}/{active}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
     public String activerListeDeLecture(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
             @PathParam("idUser") Integer idUser, @PathParam("idListeDeLecture") Integer idListeDeLecture, @PathParam("active") boolean active) {
 
@@ -209,7 +209,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
     @GET
     @Path("voirListeDeLectureALui/{noTicket}/{chaineConfirmation}/{idUtil}")
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    @Produces({ MediaType.APPLICATION_JSON} )
     public List<Listesdelecture> voirListeDeLectureALui(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,@PathParam("idUtil") Integer idUtil) {
         //List<Musiques> musiquesInPlaylist = new ArrayList<Musiques>();
 
@@ -260,7 +260,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
     @GET
     @Path("voirUneListeDeLectureALui/{noTicket}/{chaineConfirmation}/{idListe}/{idUtil}")
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    @Produces({ MediaType.APPLICATION_JSON} )
     public  List<Musiques> voirUneListeDeLectureALui(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
             @PathParam("idListe") Integer idListe, @PathParam("idUtil") Integer idUtil) {
         //List<Musiques> musiquesInPlaylist = new ArrayList<Musiques>();
@@ -347,7 +347,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
    
     @GET
     @Path("voirListeDeLectures")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
     public List<Listesdelecture> voirListeDeLectures() {      
         em.getEntityManagerFactory().getCache().evictAll();
         
@@ -376,7 +376,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
     @GET
     @Path("voirListeDeLecture/{idListe}")
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    @Produces({ MediaType.APPLICATION_JSON} )
     public List<Musiques> voirListeDeLecture(@PathParam("idListe") Integer idListe) {
         List<Musiques> musiquesInPlaylist = new ArrayList<Musiques>();
 

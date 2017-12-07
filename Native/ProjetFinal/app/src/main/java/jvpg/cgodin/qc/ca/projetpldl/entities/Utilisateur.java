@@ -22,14 +22,14 @@ public class Utilisateur {
     String motDePasse;
     String alias;
     String avatar;
-    String actif;
+    Boolean actif;
     Date date;
 
     public Utilisateur() {
 
     }
 
-    public Utilisateur(int id, String courriel, String motDePasse, String alias, String avatar, String actif, Date date) {
+    public Utilisateur(int id, String courriel, String motDePasse, String alias, String avatar, Boolean actif, Date date) {
         this.id = id;
         this.courriel = courriel;
         this.motDePasse = motDePasse;
@@ -79,11 +79,11 @@ public class Utilisateur {
         this.avatar = avatar;
     }
 
-    public String getActif() {
+    public Boolean getActif() {
         return actif;
     }
 
-    public void setActif(String actif) {
+    public void setActif(Boolean actif) {
         this.actif = actif;
     }
 
@@ -93,5 +93,18 @@ public class Utilisateur {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "id=" + id +
+                ", courriel='" + courriel + '\'' +
+                ", motDePasse='" + motDePasse + '\'' +
+                ", alias='" + alias + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", actif='" + actif + '\'' +
+                ", date=" + date +
+                '}';
     }
 }

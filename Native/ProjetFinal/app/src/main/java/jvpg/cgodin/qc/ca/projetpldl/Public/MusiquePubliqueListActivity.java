@@ -1,4 +1,4 @@
-package jvpg.cgodin.qc.ca.projetpldl;
+package jvpg.cgodin.qc.ca.projetpldl.Public;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import jvpg.cgodin.qc.ca.projetpldl.R;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Musique;
 
 import java.io.BufferedInputStream;

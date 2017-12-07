@@ -1,4 +1,4 @@
-package jvpg.cgodin.qc.ca.projetpldl;
+package jvpg.cgodin.qc.ca.projetpldl.Public;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import jvpg.cgodin.qc.ca.projetpldl.R;
 import jvpg.cgodin.qc.ca.projetpldl.dummy.DummyContent;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Musique;
 

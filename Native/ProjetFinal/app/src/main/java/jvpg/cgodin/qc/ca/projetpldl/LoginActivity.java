@@ -1,5 +1,6 @@
 package jvpg.cgodin.qc.ca.projetpldl;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -62,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 
     public void doAction(){
@@ -70,17 +73,39 @@ public class LoginActivity extends AppCompatActivity {
 
             switch (jObj.getInt("result")){
                 case 1:
+                    //"utilisateur":{"courriel"u1@gmail.ca,"motdepasse":"2ac9cb7dc02b3c0083eb70898e549b63",
+                    // "alias":"Utilisateur 1","avatar":"10","actif":true,"date":Tue Oct 20 19:00:00 EDT 2015}}
+                    JSONObject jsonUtil = jObj.getJSONObject("utilisateur");
                     Utilisateur util = new Utilisateur();
+                    util.setId(jsonUtil.getInt("id"));
+                    util.setCourriel(jsonUtil.getString("courriel"));
+                    util.setMotDePasse(jsonUtil.getString("motdepasse"));
+                    util.setAlias(jsonUtil.getString("alias"));
+                    util.setAvatar(jsonUtil.getString("avatar"));
+                    util.setActif(jsonUtil.getBoolean("actif"));
+                    utilConnecte = util;
+                    Log.i("Login", utilConnecte.toString());
 
-                    utilConnecte = new Utilisateur();
+                    Toast.makeText(LoginActivity.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
+                    Intent returnIntent = getIntent();
+                    returnIntent.putExtra("result",1);
+                    setResult(Activity.RESULT_OK,returnIntent);
+                    finish();
                     break;
                 case -1:
+
+                    Toast.makeText(LoginActivity.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                     break;
                 case -2:
+
+                    Toast.makeText(LoginActivity.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                     break;
             }
 
-            Toast.makeText(LoginActivity.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
+
+            /*if(utilConnecte != null){
+                finish();
+            }*/
 
         } catch (JSONException e) {
             e.printStackTrace();
