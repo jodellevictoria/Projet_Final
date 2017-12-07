@@ -18,21 +18,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".CreerUtilisateurActivity" />
         <activity
-            android:name=".MusiqueListActivity"
+            android:name=".MusiquePubliqueListActivity"
             android:label="@string/title_musique_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MusiqueDetailActivity"
+            android:name=".MusiquePubliqueDetailActivity"
             android:label="@string/title_musique_detail"
-            android:parentActivityName=".MusiqueListActivity"
+            android:parentActivityName=".MusiquePubliqueListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="jvpg.cgodin.qc.ca.projetpldl.MusiqueListActivity" />
+                android:value="jvpg.cgodin.qc.ca.projetpldl.MusiquePubliqueListActivity" />
         </activity>
+        <activity android:name=".ListesPubliquesActivity"></activity>
     </application>
 
 </manifest>

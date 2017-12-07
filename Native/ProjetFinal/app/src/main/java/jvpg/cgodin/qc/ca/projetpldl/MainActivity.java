@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import jvpg.cgodin.qc.ca.projetpldl.entities.Utilisateur;
+
 public class MainActivity extends AppCompatActivity {
+
+    public static Utilisateur utilConnecte = null;
 
     Button btnLogin;
     Button btnMusiquesPubliques;
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         btnMusiquesPubliques.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), MusiqueListActivity.class);
+                Intent i = new Intent(getApplicationContext(), MusiquePubliqueListActivity.class);
                 startActivity(i);
             }
         });
@@ -40,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         btnListesPubliques.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(getApplicationContext(), ListesPubliquesActivity.class);
+                startActivity(i);
             }
         });
     }

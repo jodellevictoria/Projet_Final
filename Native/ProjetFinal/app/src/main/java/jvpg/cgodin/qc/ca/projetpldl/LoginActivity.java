@@ -21,6 +21,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import jvpg.cgodin.qc.ca.projetpldl.entities.Utilisateur;
+
+import static jvpg.cgodin.qc.ca.projetpldl.MainActivity.utilConnecte;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText loginCourriel;
@@ -66,8 +70,9 @@ public class LoginActivity extends AppCompatActivity {
 
             switch (jObj.getInt("result")){
                 case 1:
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(i);
+                    Utilisateur util = new Utilisateur();
+
+                    utilConnecte = new Utilisateur();
                     break;
                 case -1:
                     break;

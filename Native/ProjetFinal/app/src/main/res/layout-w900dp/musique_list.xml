@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="jvpg.cgodin.qc.ca.projetpldl.MusiqueListActivity">
+    tools:context="jvpg.cgodin.qc.ca.projetpldl.MusiquePubliqueListActivity">
 
     <!--
     This layout is a two-pane layout for the Musiques
@@ -26,7 +26,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="jvpg.cgodin.qc.ca.projetpldl.MusiqueListActivity"
+        tools:context="jvpg.cgodin.qc.ca.projetpldl.MusiquePubliqueListActivity"
         tools:listitem="@layout/musique_list_content" />
 
     <FrameLayout

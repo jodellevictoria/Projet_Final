@@ -472,7 +472,10 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         if(util != null){
             if(util.getMotDePasse().equals(mdpMD5)){
                 //Logged in
-                retour = "{\"result\":1,\"message\":\"Connexion établie\"}";
+                retour = "{\"result\":1,\"message\":\"Connexion établie\","
+                        + "\"utilisateur\":{\"courriel\""+ util.getCourriel() +",\"motdepasse\":\""+util.getMotDePasse()+"\""
+                        + ",\"alias\":\""+util.getAlias()+"\",\"avatar\":\""+util.getAvatar()+"\""
+                        + ",\"actif\":"+util.getActif()+",\"date\":"+util.getDate()+"}}";
             }
             else{
                 //MDP Invalide
