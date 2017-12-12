@@ -38,17 +38,17 @@
         <activity android:name=".Public.ListesPubliquesActivity" />
         <activity android:name=".Public.ModifierProfilActivity" />
         <activity
-            android:name=".PlaylistDetailListActivity"
-            android:label="@string/title_playlistdetail_list"
+            android:name=".Public.ListePubliqueContenuListActivity"
+            android:label="@string/title_listepubliquecontenu_list"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".PlaylistDetailDetailActivity"
-            android:label="@string/title_playlistdetail_detail"
-            android:parentActivityName=".PlaylistDetailListActivity"
+            android:name=".Public.ListePubliqueContenuDetailActivity"
+            android:label="@string/title_listepubliquecontenu_detail"
+            android:parentActivityName=".Public.ListePubliqueContenuListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="jvpg.cgodin.qc.ca.projetpldl.PlaylistDetailListActivity" />
+                android:value="jvpg.cgodin.qc.ca.projetpldl.Public.ListePubliqueContenuListActivity" />
         </activity>
     </application>
 

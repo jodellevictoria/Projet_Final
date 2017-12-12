@@ -90,31 +90,5 @@
             android:layout_weight="1"
             android:text="Faire des modifications" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <ToggleButton
-                android:id="@+id/togglePublique"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ToggleButton"
-                android:textOff="Privé"
-                android:textOn="Publique" />
-
-            <ToggleButton
-                android:id="@+id/toggleActive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ToggleButton"
-                android:textOff="Desactivé"
-                android:textOn="Publique" />
-
-        </LinearLayout>
-
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -155,6 +155,17 @@ public class ListesPubliquesActivity extends AppCompatActivity {
 
         List<ListeDeLecture> planetList;
 
+        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String item = (String) view.getTag().toString();
+                Intent intent = new Intent(getApplicationContext(), ListePubliqueContenuListActivity.class);
+                intent.putExtra("idListe", item);
+
+                startActivity(intent);
+            }
+        };
+
         public PlanetAdapter(List<ListeDeLecture> planetList, Context context) {
             this.planetList = planetList;
         }
@@ -170,8 +181,8 @@ public class ListesPubliquesActivity extends AppCompatActivity {
         public void onBindViewHolder(PlanetAdapter.PlanetViewHolder holder, int position) {
             //holder.image.setImageResource(R.drawable.planetimage);
             holder.infoFilms.setText(planetList.get(position).getNom());
-
-
+            holder.infoFilms.setOnClickListener(mOnClickListener);
+            holder.infoFilms.setTag(planetList.get(position).getId());
 
         }
 

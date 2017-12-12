@@ -1,4 +1,4 @@
-package jvpg.cgodin.qc.ca.projetpldl;
+package jvpg.cgodin.qc.ca.projetpldl.Public;
 
 import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,15 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import jvpg.cgodin.qc.ca.projetpldl.dummy.DummyContent;
+import jvpg.cgodin.qc.ca.projetpldl.R;
+import jvpg.cgodin.qc.ca.projetpldl.Public.dummy.DummyContent;
 
 /**
- * A fragment representing a single PlaylistDetail detail screen.
- * This fragment is either contained in a {@link PlaylistDetailListActivity}
- * in two-pane mode (on tablets) or a {@link PlaylistDetailDetailActivity}
+ * A fragment representing a single ListePubliqueContenu detail screen.
+ * This fragment is either contained in a {@link ListePubliqueContenuListActivity}
+ * in two-pane mode (on tablets) or a {@link ListePubliqueContenuDetailActivity}
  * on handsets.
  */
-public class PlaylistDetailDetailFragment extends Fragment {
+public class ListePubliqueContenuDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -33,7 +34,7 @@ public class PlaylistDetailDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PlaylistDetailDetailFragment() {
+    public ListePubliqueContenuDetailFragment() {
     }
 
     @Override
@@ -57,11 +58,11 @@ public class PlaylistDetailDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.playlistdetail_detail, container, false);
+        View rootView = inflater.inflate(R.layout.listepubliquecontenu_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.playlistdetail_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.listepubliquecontenu_detail)).setText(mItem.details);
         }
 
         return rootView;

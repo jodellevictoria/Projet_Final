@@ -16,12 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import jvpg.cgodin.qc.ca.projetpldl.R;
+
+import jvpg.cgodin.qc.ca.projetpldl.Public.dummy.DummyContent;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Musique;
 
 import java.io.BufferedInputStream;
@@ -34,35 +35,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An activity representing a list of Musiques. This activity
+ * An activity representing a list of Items. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link MusiquePubliqueDetailActivity} representing
+ * lead to a {@link ListePubliqueContenuDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class MusiquePubliqueListActivity extends AppCompatActivity {
+public class ListePubliqueContenuListActivity extends AppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
-    private String url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/musiquesPubliques";
-    private List<Musique> musiquesPubliques = new ArrayList<Musique>();
+
+    private List<Musique> musiquesDansListe = new ArrayList<Musique>();
+    int idListe;
     String fluxJSON = "";
+    String url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/listesdelecture/voirListeDeLecture/";
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_musique_list);
-
-        new GGDownloadTask().execute("test");
-
+        setContentView(R.layout.activity_listepubliquecontenu_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            idListe = Integer.parseInt(extras.getString("idListe"));
+            Log.i("List content", idListe+"");
+        }
+
+        new GGDownloadTask().execute("test");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +80,7 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
             }
         });
 
-        if (findViewById(R.id.musique_detail_container) != null) {
+        if (findViewById(R.id.listepubliquecontenu_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
@@ -80,24 +88,39 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        /*View recyclerView = findViewById(R.id.musique_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);*/
+
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, musiquesPubliques, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, musiquesDansListe, mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final MusiquePubliqueListActivity mParentActivity;
+        private final ListePubliqueContenuListActivity mParentActivity;
         private final List<Musique> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Musique item = (Musique) view.getTag();
+                /*if (mTwoPane) {
+                    Bundle arguments = new Bundle();
+                    arguments.putString(ListePubliqueContenuDetailFragment.ARG_ITEM_ID, item.id);
+                    ListePubliqueContenuDetailFragment fragment = new ListePubliqueContenuDetailFragment();
+                    fragment.setArguments(arguments);
+                    mParentActivity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.listepubliquecontenu_detail_container, fragment)
+                            .commit();
+                } else {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, ListePubliqueContenuDetailActivity.class);
+                    intent.putExtra(ListePubliqueContenuDetailFragment.ARG_ITEM_ID, item.id);
+
+                    context.startActivity(intent);
+                }*/
+
                 //DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
                 //Musique item = (Musique) view.getTag();
                 String item = (String) view.getTag().toString();
@@ -119,7 +142,7 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
             }
         };
 
-        SimpleItemRecyclerViewAdapter(MusiquePubliqueListActivity parent,
+        SimpleItemRecyclerViewAdapter(ListePubliqueContenuListActivity parent,
                                       List<Musique> items,
                                       boolean twoPane) {
             mValues = items;
@@ -130,16 +153,15 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.musique_list_content, parent, false);
+                    .inflate(R.layout.listepubliquecontenu_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).getTitre() + " - " + mValues.get(position).getArtiste());
-            //holder.mContentView.setText(mValues.get(position).content);
+            holder.mContentView.setText(mValues.get(position).getTitre() + " - " + mValues.get(position).getArtiste());
 
-            holder.itemView.setTag(mValues.get(position).getId());
+            holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
@@ -149,12 +171,10 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mIdView;
             final TextView mContentView;
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
         }
@@ -187,7 +207,7 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
                 m.setPublique(musique.getBoolean("publique"));
                 m.setActive(musique.getBoolean("active"));
                 //m.setDate(new Date(musique.getString("date")));
-                musiquesPubliques.add(m);
+                musiquesDansListe.add(m);
 
                 Log.i("Musique",m.toString());
             }
@@ -199,12 +219,12 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
         }
     }
 
+
     public class GGDownloadTask extends AsyncTask<String, Integer, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //params = loginCourriel.getText().toString() + "/" + loginMotDePasse.getText().toString();
         }
 
         //cette méthode prend en argument un tableau illimité de chaines de caractères
@@ -224,20 +244,19 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            //Toast.makeText(LoginActivity.this, "Fin de l'exécution du traitement en arrière-plan", Toast.LENGTH_SHORT).show();
-            //doAction();
             fillList();
-            View recyclerView = findViewById(R.id.musique_list);
+            Log.i("JSON",fluxJSON);
+            View recyclerView = findViewById(R.id.listepubliquecontenu_list);
             assert recyclerView != null;
             setupRecyclerView((RecyclerView) recyclerView);
-            Log.i("JSON",fluxJSON);
         }
 
         public String getJSON() {
             HttpURLConnection c = null;
             String resultat = "";
             try {
-                URL u = new URL(url);
+                URL u = new URL(url+idListe);
+                Log.i("getJSON",url+idListe);
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 StringBuffer sb = new StringBuffer();
