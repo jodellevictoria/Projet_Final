@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="jvpg.cgodin.qc.ca.projetpldl">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".CreerUtilisateurActivity" />
+        <activity android:name=".CreerUtilisateurCaptchaActivity" />
+        <activity android:name=".ModifierUtilisateurActivity" />
+        <activity
+            android:name=".Public.MusiquePubliqueListActivity"
+            android:label="@string/title_musique_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Public.MusiquePubliqueDetailActivity"
+            android:label="@string/title_musique_detail"
+            android:parentActivityName=".Public.MusiquePubliqueListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueListActivity" />
+        </activity>
+        <activity android:name=".Public.ListesPubliquesActivity" />
+        <activity android:name=".Public.ModifierProfilActivity" />
+        <activity
+            android:name=".PlaylistDetailListActivity"
+            android:label="@string/title_playlistdetail_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".PlaylistDetailDetailActivity"
+            android:label="@string/title_playlistdetail_detail"
+            android:parentActivityName=".PlaylistDetailListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jvpg.cgodin.qc.ca.projetpldl.PlaylistDetailListActivity" />
+        </activity>
+    </application>
+
+</manifest>

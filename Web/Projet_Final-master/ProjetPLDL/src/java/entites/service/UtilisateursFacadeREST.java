@@ -442,7 +442,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         return messageRetour;
     }
     
-    @GET
+    /*@GET
     @Path("validerUtilisateur/{courriel}/{motDePasse}")
     //@Produces(MediaType.TEXT_PLAIN)
     @Produces({MediaType.APPLICATION_JSON})
@@ -476,7 +476,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         this.alias = alias;
         this.avatar = avatar;
         this.actif = actif;
-        this.date = date;*/
+        this.date = date;
        
         if(util != null){
             if(util.getMotDePasse().equals(mdpMD5)){
@@ -489,6 +489,75 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             else{
                 //MDP Invalide
                 retour = "{\"result\":-1,\"message\":\"Mot de passe invalide\"}";
+            }
+        }
+        else{
+           
+            retour = "{\"result\":-2,\"message\":\"Le courriel entré n'est pas dans la base\"}";
+        }
+       
+        return retour;
+    }*/
+    
+    @GET
+    @Path("validerUtilisateur/{noTicket}/{chaineConfirmation}/{courriel}/{motDePasse}")
+    //@Produces(MediaType.TEXT_PLAIN)
+    @Produces({MediaType.APPLICATION_JSON})
+    //@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String validerUtilisateur(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasseMd5) {
+        String retour = "";
+        Query q = em.createNamedQuery("Utilisateurs.findByCourriel");
+        q.setParameter("courriel", courriel);
+               
+        Utilisateurs util = null;
+        try{
+            util = (Utilisateurs) q.getSingleResult();
+        }
+        catch(Exception ex){
+           
+        }
+        /*String mdpMD5 = "";
+        try {
+            MessageDigest m=MessageDigest.getInstance("MD5");
+            m.update(motDePasse.getBytes(),0,motDePasse.length());
+            //System.out.println("MD5: "+new BigInteger(1,m.digest()).toString(16));
+            mdpMD5 = new BigInteger(1,m.digest()).toString(16);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UtilisateursFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+        /*this.id = id;
+        this.courriel = courriel;
+        this.motDePasse = motDePasse;
+        this.alias = alias;
+        this.avatar = avatar;
+        this.actif = actif;
+        this.date = date;*/
+        
+        if(util != null){
+            Ticket ticket = tickets.get(noTicket);
+            if(ticket != null){
+                if(ticket.getChaineConfirmation().equals(chaineConfirmation) && ticket.getIdUtil() == util.getId()){
+                    if(util.getMotDePasse().equals(motDePasseMd5)){
+                        //Logged in
+                        retour = "{\"result\":1,\"message\":\"Connexion établie\","
+                                + "\"utilisateur\":{\"id\":"+ util.getId()
+                                + ",\"alias\":\""+util.getAlias()+"\",\"avatar\":\""+util.getAvatar()+"\""
+                                + ",\"actif\":"+util.getActif()+",\"date\":\""+util.getDate()+"\"}}";
+                        tickets.remove(ticket);
+                    }
+                    else{
+                        //MDP Invalide
+                        retour = "{\"result\":-1,\"message\":\"Mot de passe invalide\"}";
+                    }
+                }
+                else{
+                    retour = "{\"result\":-3,\"message\":\"Mot de passe invalide\"}";
+                }
+            }
+            else{
+                retour = "{\"result\":-4,\"message\":\"Ticket n'existe pas\"}";
             }
         }
         else{
