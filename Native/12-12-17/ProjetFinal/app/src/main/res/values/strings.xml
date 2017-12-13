@@ -9,4 +9,8 @@
     <string name="title_playlistdetail_detail">PlaylistDetail Detail</string>
     <string name="title_listepubliquecontenu_list">Items</string>
     <string name="title_listepubliquecontenu_detail">ListePubliqueContenu Detail</string>
+    <string name="title_musiquesutil_list">Musique</string>
+    <string name="title_musiquesutil_detail">MusiquesUtil Detail</string>
+    <string name="title_listeutilcontent_list">Items</string>
+    <string name="title_listeutilcontent_detail">ListeUtilContent Detail</string>
 </resources>

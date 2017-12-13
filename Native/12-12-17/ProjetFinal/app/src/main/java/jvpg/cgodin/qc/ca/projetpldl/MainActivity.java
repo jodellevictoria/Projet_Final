@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import jvpg.cgodin.qc.ca.projetpldl.Private.ListesUtilActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Public.ListesPubliquesActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueListActivity;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Utilisateur;
@@ -78,7 +79,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnMusiquesUtil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListesUtilActivity.class);
+                startActivity(i);
+            }
+        });
 
+        btnListesUtil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListesUtilActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btnModifierUtil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ModifierUtilisateurActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override

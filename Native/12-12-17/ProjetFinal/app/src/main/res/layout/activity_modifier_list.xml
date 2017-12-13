@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="jvpg.cgodin.qc.ca.projetpldl.Private.ModifierListActivity">
+
+    <Button
+        android:id="@+id/btnSauvegarderNom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Changer le nom"
+        app:layout_constraintTop_toBottomOf="@+id/modifListeNom"
+        tools:layout_editor_absoluteX="121dp" />
+
+    <EditText
+        android:id="@+id/modifListeNom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="72dp"
+        android:ems="10"
+        android:hint="Nom de la liste"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ToggleButton
+        android:id="@+id/toggleListPublic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="88dp"
+        android:textOff="Privé"
+        android:textOn="Publique"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSauvegarderNom" />
+
+    <ToggleButton
+        android:id="@+id/toggleListeActif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="88dp"
+        android:text="ToggleButton"
+        android:textOff="Désactivé"
+        android:textOn="Activé"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toEndOf="@+id/toggleListPublic"
+        app:layout_constraintTop_toBottomOf="@+id/btnSauvegarderNom" />
+</android.support.constraint.ConstraintLayout>

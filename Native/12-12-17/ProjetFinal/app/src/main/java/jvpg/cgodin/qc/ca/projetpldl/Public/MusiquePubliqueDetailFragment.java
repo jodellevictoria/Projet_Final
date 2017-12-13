@@ -1,17 +1,29 @@
 package jvpg.cgodin.qc.ca.projetpldl.Public;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.VideoView;
+
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +35,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import jvpg.cgodin.qc.ca.projetpldl.Config;
 import jvpg.cgodin.qc.ca.projetpldl.R;
 import jvpg.cgodin.qc.ca.projetpldl.dummy.DummyContent;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Musique;
@@ -33,11 +46,13 @@ import jvpg.cgodin.qc.ca.projetpldl.entities.Musique;
  * in two-pane mode (on tablets) or a {@link MusiquePubliqueDetailActivity}
  * on handsets.
  */
+
+
 public class MusiquePubliqueDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+
+
+
+
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
@@ -50,9 +65,12 @@ public class MusiquePubliqueDetailFragment extends Fragment {
     TextView txtTitre;
     TextView txtArtiste;
     TextView txtProprietaire;
+    ImageView imgVignette;
     ToggleButton togglePublique;
     ToggleButton toggleActive;
-    VideoView videoMusique;
+    YouTubePlayerView videoYoutubeMusique;
+    YouTubePlayerSupportFragment mYoutubePlayerFragment;
+    YouTubePlayer.OnInitializedListener onInitializedListener;
 
     private String url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/musiquePublique/";
     //private List<Musique> musiquesPubliques = new ArrayList<Musique>();
@@ -94,9 +112,16 @@ public class MusiquePubliqueDetailFragment extends Fragment {
         txtArtiste = (TextView) rootView.findViewById(R.id.txtTitre);
         txtTitre = (TextView) rootView.findViewById(R.id.txtArtiste);
         txtProprietaire = (TextView) rootView.findViewById(R.id.txtProprietaire);
-        toggleActive = (ToggleButton) rootView.findViewById(R.id.toggleActive);
-        togglePublique = (ToggleButton) rootView.findViewById(R.id.togglePublique);
-        videoMusique = (VideoView) rootView.findViewById(R.id.videoMusique);
+        imgVignette = (ImageView) rootView.findViewById(R.id.imgVignette);
+        //videoYoutubeMusique = (YouTubePlayerView) rootView.findViewById(R.id.videoYoutubeMusique);
+
+        mYoutubePlayerFragment = new YouTubePlayerSupportFragment();
+        //mYoutubePlayerFragment.initialize(youtubeKey, this);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_youtube_player, mYoutubePlayerFragment);
+        fragmentTransaction.commit();
+
 
         //new GGDownloadTask().execute("test");
         Log.i("MusiqueDetail", (musique!=null)+"");
@@ -150,11 +175,30 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             txtTitre.setText(musique.getTitre());
             txtArtiste.setText(musique.getArtiste());
             txtProprietaire.setText("Propriétaire: " + musique.getProprietaire());
-            togglePublique.setChecked(musique.isPublique());
-            toggleActive.setChecked(musique.isActive());
-            videoMusique.setVideoURI(Uri.parse(musique.getMusique()));
+
+            byte[] decodedString = Base64.decode(musique.getVignette(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            imgVignette.setImageBitmap(decodedByte);
+
+
+
+            onInitializedListener = new YouTubePlayer.OnInitializedListener() {
+                @Override
+                public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                    youTubePlayer.loadVideo(musique.getMusique().substring(musique.getMusique().lastIndexOf("/") + 1));
+                }
+
+                @Override
+                public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+                }
+            };
+
+            mYoutubePlayerFragment.initialize(Config.YOUTUBE_API_KEY,onInitializedListener);
+
         }
     }
+
 
     public class GGDownloadTask extends AsyncTask<String, Integer, String> {
 

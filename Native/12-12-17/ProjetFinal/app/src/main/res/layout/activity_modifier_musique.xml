@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="jvpg.cgodin.qc.ca.projetpldl.Private.ModifierMusiqueActivity">
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Sauvegarder les modifications"
+        app:layout_constraintTop_toBottomOf="@+id/modifMusiqueArtiste"
+        tools:layout_editor_absoluteX="63dp" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="ToggleButton"
+        android:textOff="Privé"
+        android:textOn="Publique"
+        app:layout_constraintTop_toBottomOf="@+id/btnSave"
+        tools:layout_editor_absoluteX="63dp" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="60dp"
+        android:text="ToggleButton"
+        android:textOff="Désactivé"
+        android:textOn="Active"
+        app:layout_constraintStart_toEndOf="@+id/toggleButton"
+        app:layout_constraintTop_toBottomOf="@+id/btnSave" />
+
+    <EditText
+        android:id="@+id/modifMusiqueTitre"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="88dp"
+        android:ems="10"
+        android:hint="Titre de la musique"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/modifMusiqueArtiste"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Artiste de la musique"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/modifMusiqueTitre"
+        tools:layout_editor_absoluteX="85dp" />
+</android.support.constraint.ConstraintLayout>

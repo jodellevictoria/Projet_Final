@@ -161,7 +161,7 @@ public class ListePubliqueContenuListActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mContentView.setText(mValues.get(position).getTitre() + " - " + mValues.get(position).getArtiste());
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.itemView.setTag(mValues.get(position).getId());
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 

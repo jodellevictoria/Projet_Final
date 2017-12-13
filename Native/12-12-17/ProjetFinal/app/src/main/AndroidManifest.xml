@@ -36,11 +36,11 @@
                 android:value="jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueListActivity" />
         </activity>
         <activity android:name=".Public.ListesPubliquesActivity" />
-        <activity android:name=".Public.ModifierProfilActivity" />
+        <activity android:name=".ModifierProfilActivity" />
         <activity
             android:name=".Public.ListePubliqueContenuListActivity"
             android:label="@string/title_listepubliquecontenu_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Public.ListePubliqueContenuDetailActivity"
             android:label="@string/title_listepubliquecontenu_detail"
@@ -50,6 +50,35 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="jvpg.cgodin.qc.ca.projetpldl.Public.ListePubliqueContenuListActivity" />
         </activity>
+        <activity
+            android:name=".Private.MusiquesUtilListActivity"
+            android:label="@string/title_musiquesutil_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Private.MusiquesUtilDetailActivity"
+            android:label="@string/title_musiquesutil_detail"
+            android:parentActivityName=".Private.MusiquesUtilListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jvpg.cgodin.qc.ca.projetpldl.Private.MusiquesUtilListActivity" />
+        </activity>
+        <activity android:name=".Private.ListesUtilActivity" />
+        <activity
+            android:name=".Private.ListeUtilContentListActivity"
+            android:label="@string/title_listeutilcontent_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Private.ListeUtilContentDetailActivity"
+            android:label="@string/title_listeutilcontent_detail"
+            android:parentActivityName=".Private.ListeUtilContentListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jvpg.cgodin.qc.ca.projetpldl.Private.ListeUtilContentListActivity" />
+        </activity>
+        <activity android:name=".Private.ModifierListActivity" />
+        <activity android:name=".Private.ModifierMusiqueActivity"></activity>
     </application>
 
 </manifest>
