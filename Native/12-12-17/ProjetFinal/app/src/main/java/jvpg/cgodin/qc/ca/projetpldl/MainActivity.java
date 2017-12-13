@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import jvpg.cgodin.qc.ca.projetpldl.Private.ListesUtilActivity;
+import jvpg.cgodin.qc.ca.projetpldl.Private.MusiquesUtilListActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Public.ListesPubliquesActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueListActivity;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Utilisateur;
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         btnMusiquesUtil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ListesUtilActivity.class);
+                Intent i = new Intent(getApplicationContext(), MusiquesUtilListActivity.class);
                 startActivity(i);
             }
         });
