@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="jvpg.cgodin.qc.ca.projetpldl.Private.AddMusiqueActivity">
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Ajouter"
+        app:layout_constraintTop_toBottomOf="@+id/toggleActif"
+        tools:layout_editor_absoluteX="148dp" />
+
+    <ToggleButton
+        android:id="@+id/togglePublique"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="ToggleButton"
+        android:textOff="Privée"
+        android:textOn="Publique"
+        app:layout_constraintTop_toBottomOf="@+id/addMusiqueArtiste"
+        tools:layout_editor_absoluteX="85dp" />
+
+    <ToggleButton
+        android:id="@+id/toggleActif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="48dp"
+        android:text="ToggleButton"
+        android:textOff="Desactivée"
+        android:textOn="Active"
+        app:layout_constraintStart_toEndOf="@+id/togglePublique"
+        app:layout_constraintTop_toBottomOf="@+id/addMusiqueArtiste" />
+
+    <EditText
+        android:id="@+id/addMusiqueTitre"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:hint="Titre de la musique"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtURL" />
+
+    <EditText
+        android:id="@+id/addMusiqueArtiste"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Artiste de la musique"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/addMusiqueTitre"
+        tools:layout_editor_absoluteX="85dp" />
+
+    <TextView
+        android:id="@+id/txtURL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:text="URLVIDEO"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintStart_toEndOf="@+id/imgVignette"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgVignette"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher" />
+</android.support.constraint.ConstraintLayout>

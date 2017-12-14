@@ -9,7 +9,14 @@ import entites.Musiques;
 import entites.Ticket;
 import entites.Utilisateurs;
 import static entites.service.UtilisateursFacadeREST.tickets;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -25,6 +32,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.hibernate.validator.internal.util.logging.Log;
 
 /**
  *
@@ -50,23 +58,27 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     
     @GET
     @Path("creerMusique/{noTicket}/{chaineConfirmation}/{idUser}/{titre}/{artiste}/{musique}/{vignette}/{publique}/{active}")
-    @Consumes({MediaType.TEXT_PLAIN})
-    @Produces({MediaType.TEXT_PLAIN})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public String creerMusique(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, 
             @PathParam("idUser") Integer idUser, @PathParam("titre") String titre, @PathParam("artiste") String artiste,
             @PathParam("musique") String musique, @PathParam("vignette") String vignette,
-            @PathParam("publique") boolean publique, @PathParam("active") boolean active) {
+            @PathParam("publique") boolean publique, @PathParam("active") boolean active) throws UnsupportedEncodingException {
         //em.getEntityManagerFactory().getCache().evictAll();
         String messageRetour = "empty";
 
         Ticket ticket = tickets.get(noTicket);        
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil()){
+            String vignetteTempo = vignette;
+            vignetteTempo = vignetteTempo.replaceAll("Password1", "\\+");
+            vignetteTempo = vignetteTempo.replaceAll("Password2", "/");
+            vignetteTempo = vignetteTempo.replaceAll("Password3", "=");
             Musiques musiqueAjout = new Musiques();
             musiqueAjout.setProprietaire(idUser);
             musiqueAjout.setTitre(titre);
             musiqueAjout.setArtiste(artiste);
-            musiqueAjout.setMusique(musique);
-            musiqueAjout.setVignette(vignette);
+            musiqueAjout.setMusique(URLDecoder.decode(musique, "UTF-8"));
+            musiqueAjout.setVignette(vignetteTempo);
             musiqueAjout.setPublique(publique);
             musiqueAjout.setActive(active);
             musiqueAjout.setDate(new Date());
@@ -91,6 +103,24 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
         
         return messageRetour;
     }
+    /*private String getByteArrayFromImageURL(String url) {
+
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+            InputStream is = ucon.getInputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int read = 0;
+            while ((read = is.read(buffer, 0, buffer.length)) != -1) {
+                baos.write(buffer, 0, read);
+            }
+            baos.flush();
+            return Base64.encodeToString(baos.toByteArray(), Base64.);
+        } catch (Exception e) {
+        }
+        return null;
+    }*/
 
     @PUT
     @Path("{id}")

@@ -335,7 +335,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
        
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil())
         {
-            if(musique==null || (musique.getActive() == false || musique.getPublique()==false))
+            if(musique==null || ((musique.getActive() == false || musique.getPublique()==false) && musique.getProprietaire() != idUser))
             {
                 messageRetour="musique introuvée ou inactive/privée";
             }
@@ -465,7 +465,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
        
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil())
         {
-            if(musique==null || (musique.getActive() == false || musique.getPublique()== false))
+            if(musique==null || ((musique.getActive() == false || musique.getPublique()== false) && musique.getProprietaire() != idUser))
             {
                 messageRetour="musique introuvé ou inactive/privée";
             }

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">ProjetPLDL</string>
+    <string name="title_musique_list">Musiques</string>
+    <string name="title_musique_detail">Musique Detail</string>
+    <string name="player_error">Error initializing YouTube player: %s</string>
+    <string name="seek_to">Jump To</string>
+    <string name="seek_to_hint">Seconds</string>
+    <string name="title_playlistdetail_list">Items</string>
+    <string name="title_playlistdetail_detail">PlaylistDetail Detail</string>
+    <string name="title_listepubliquecontenu_list">Items</string>
+    <string name="title_listepubliquecontenu_detail">ListePubliqueContenu Detail</string>
+    <string name="title_musiquesutil_list">Musique</string>
+    <string name="title_musiquesutil_detail">MusiquesUtil Detail</string>
+    <string name="title_listeutilcontent_list">Items</string>
+    <string name="title_listeutilcontent_detail">ListeUtilContent Detail</string>
+</resources>
