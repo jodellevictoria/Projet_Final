@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -94,6 +96,16 @@ public class MusiquePubliqueDetailFragment extends Fragment {
     int noTicket;
     String chaineConfirmation;
 
+
+    Button btnEdit;
+    Button btnAddToPlaylist;
+    Button btnRemoveFromPlaylist;
+    Button btnCopyToList;
+    Button btnTransferToList;
+
+    LinearLayout lnPlaylistActions;
+    LinearLayout lnModifications;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -142,11 +154,57 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             //((TextView) rootView.findViewById(R.id.musique_detail)).setText(mItem.details);
         }*/
 
-        txtArtiste = (TextView) rootView.findViewById(R.id.txtTitre);
-        txtTitre = (TextView) rootView.findViewById(R.id.txtArtiste);
+        txtArtiste = (TextView) rootView.findViewById(R.id.txtArtiste);
+        txtTitre = (TextView) rootView.findViewById(R.id.txtTitre);
         txtProprietaire = (TextView) rootView.findViewById(R.id.txtProprietaire);
         imgVignette = (ImageView) rootView.findViewById(R.id.imgVignette);
         //videoYoutubeMusique = (YouTubePlayerView) rootView.findViewById(R.id.videoYoutubeMusique);
+
+        btnEdit = (Button) rootView.findViewById(R.id.btnEdit);
+        btnAddToPlaylist = (Button) rootView.findViewById(R.id.btnAddToPlaylist);
+        btnRemoveFromPlaylist = (Button) rootView.findViewById(R.id.btnRemoveFromPlaylist);
+        btnCopyToList = (Button) rootView.findViewById(R.id.btnCopyToList);
+        btnTransferToList = (Button) rootView.findViewById(R.id.btnTransferToList);
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnAddToPlaylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnRemoveFromPlaylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnCopyToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnTransferToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
+        lnPlaylistActions = (LinearLayout) rootView.findViewById(R.id.lnPlaylistActions);
+        lnModifications = (LinearLayout) rootView.findViewById(R.id.lnModifications);
 
         mYoutubePlayerFragment = new YouTubePlayerSupportFragment();
         //mYoutubePlayerFragment.initialize(youtubeKey, this);
@@ -154,7 +212,6 @@ public class MusiquePubliqueDetailFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_youtube_player, mYoutubePlayerFragment);
         fragmentTransaction.commit();
-
 
         //new GGDownloadTask().execute("test");
         Log.i("MusiqueDetail", (musique!=null)+"");
@@ -196,9 +253,6 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             musique.setVignette(jObj.getString("vignette"));
             musique.setPublique(jObj.getBoolean("publique"));
             musique.setActive(jObj.getBoolean("active"));
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -212,8 +266,6 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             byte[] decodedString = Base64.decode(musique.getVignette(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             imgVignette.setImageBitmap(decodedByte);
-
-
 
             onInitializedListener = new YouTubePlayer.OnInitializedListener() {
                 @Override
@@ -229,6 +281,38 @@ public class MusiquePubliqueDetailFragment extends Fragment {
 
             mYoutubePlayerFragment.initialize(Config.YOUTUBE_API_KEY,onInitializedListener);
 
+            switch(action){
+                case ARG_ACTION_UTIL:
+                    btnAddToPlaylist.setEnabled(true);
+                    lnPlaylistActions.setVisibility(View.INVISIBLE);
+                    lnModifications.setVisibility(View.VISIBLE);
+                    break;
+                case ARG_ACTION_PUBLIC:
+                    if(utilConnecte == null) {
+                        btnAddToPlaylist.setEnabled(false);
+                        lnModifications.setVisibility(View.INVISIBLE);
+                    }
+                    else {
+                        btnAddToPlaylist.setEnabled(true);
+
+                        if(musique.getProprietaire() == utilConnecte.getId())
+                            lnModifications.setVisibility(View.VISIBLE);
+                        else
+                            lnModifications.setVisibility(View.INVISIBLE);
+                    }
+
+                    lnPlaylistActions.setVisibility(View.INVISIBLE);
+                    break;
+                case ARG_ACTION_LIST:
+                    btnAddToPlaylist.setEnabled(true);
+                    lnPlaylistActions.setVisibility(View.VISIBLE);
+
+                    if(musique.getProprietaire() == utilConnecte.getId())
+                        lnModifications.setVisibility(View.VISIBLE);
+                    else
+                        lnModifications.setVisibility(View.INVISIBLE);
+                    break;
+            }
         }
     }
 
@@ -327,8 +411,7 @@ public class MusiquePubliqueDetailFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             //params = loginCourriel.getText().toString() + "/" + loginMotDePasse.getText().toString();
-            paramsService = action.equals(ARG_ACTION_PUBLIC) ? idMusique :
-                    action.equals(ARG_ACTION_UTIL) ? noTicket + "/" + chaineConfirmation + "/" + utilConnecte.getId() + "/" + idMusique : idMusique;
+            paramsService = action.equals(ARG_ACTION_PUBLIC) ? idMusique : noTicket + "/" + chaineConfirmation + "/" + utilConnecte.getId() + "/" + idMusique;
 
         }
 
@@ -390,17 +473,20 @@ public class MusiquePubliqueDetailFragment extends Fragment {
 
     private void doPublicAction(){
         url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/musiquePublique/";
+
         new GGDownloadTask().execute("test");
     }
 
     private void doListAction(){
-        url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/";
-        new GGDownloadTask().execute("test");
+        url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/listesdelecture/consulterMusiqueDansListe/";
+
+        new GGDownloadTaskTicket().execute("test");
     }
 
     private void doUtilAction(){
         //{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}
         url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/consulterMusique/";
+
         new GGDownloadTaskTicket().execute("test");
     }
 }

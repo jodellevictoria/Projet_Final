@@ -344,6 +344,45 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
         }
         return listeMusiques;
     }
+    
+    @GET
+    @Path("consulterMusiqueDansListe/{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}")
+    @Produces({ MediaType.APPLICATION_JSON})
+    public Musiques consulterMusiqueDansListe(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation, 
+            @PathParam("idUser") Integer idUser, @PathParam("idMusique") Integer idMusique) {
+        Musiques musique = null;
+        Musiques musiqueFound = null;
+        Query q = em.createNamedQuery("Musiques.findById");
+        q.setParameter("id", idMusique);
+        try{
+            musiqueFound = (Musiques) q.getSingleResult();
+            /*if(musiqueFound != null){
+                musique = musiqueFound;
+            }*/
+        }
+        catch(Exception ex){
+            
+        }
+        
+        if(musiqueFound != null){
+            Ticket ticket = tickets.get(noTicket);
+        
+            if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil()){
+                if(musiqueFound.getProprietaire() == idUser){
+                    musique = musiqueFound;
+                    tickets.remove(noTicket);
+                }
+                else{
+                    if(musiqueFound.getActive() && musiqueFound.getPublique()){
+                        musique = musiqueFound;
+                        tickets.remove(noTicket);
+                    }
+                }
+            }
+        }
+        
+        return musique;
+    }
    
     @GET
     @Path("voirListeDeLectures")

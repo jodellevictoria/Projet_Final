@@ -78,7 +78,8 @@
                 android:value="jvpg.cgodin.qc.ca.projetpldl.Private.ListeUtilContentListActivity" />
         </activity>
         <activity android:name=".Private.ModifierListActivity" />
-        <activity android:name=".Private.ModifierMusiqueActivity"></activity>
+        <activity android:name=".Private.ModifierMusiqueActivity" />
+        <activity android:name=".Private.AddMusiqueActivity"></activity>
     </application>
 
 </manifest>
