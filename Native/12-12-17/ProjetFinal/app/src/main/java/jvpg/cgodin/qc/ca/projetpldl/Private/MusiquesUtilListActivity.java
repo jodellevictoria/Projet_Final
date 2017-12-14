@@ -1,5 +1,7 @@
 package jvpg.cgodin.qc.ca.projetpldl.Private;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import jvpg.cgodin.qc.ca.projetpldl.LoginActivity;
+import jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueDetailActivity;
+import jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueDetailFragment;
 import jvpg.cgodin.qc.ca.projetpldl.R;
 
 import jvpg.cgodin.qc.ca.projetpldl.Private.dummy.DummyContent;
@@ -130,6 +134,25 @@ public class MusiquesUtilListActivity extends AppCompatActivity {
 
                     context.startActivity(intent);
                 }*/
+
+                String item = (String) view.getTag().toString();
+                if (mTwoPane) {
+                    Bundle arguments = new Bundle();
+                    arguments.putString(MusiquePubliqueDetailFragment.ARG_ITEM_ID, item);
+                    arguments.putString(MusiquePubliqueDetailFragment.ARG_ACTION_NAME,MusiquePubliqueDetailFragment.ARG_ACTION_UTIL);
+                    MusiquePubliqueDetailFragment fragment = new MusiquePubliqueDetailFragment();
+                    fragment.setArguments(arguments);
+                    mParentActivity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.musique_detail_container, fragment)
+                            .commit();
+                } else {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, MusiquePubliqueDetailActivity.class);
+                    intent.putExtra(MusiquePubliqueDetailFragment.ARG_ITEM_ID, item);
+                    intent.putExtra(MusiquePubliqueDetailFragment.ARG_ACTION_NAME,MusiquePubliqueDetailFragment.ARG_ACTION_UTIL);
+                    Log.i("Test",MusiquePubliqueDetailFragment.ARG_ACTION_NAME +" /"+MusiquePubliqueDetailFragment.ARG_ACTION_UTIL);
+                    context.startActivity(intent);
+                }
             }
         };
 
@@ -153,8 +176,8 @@ public class MusiquesUtilListActivity extends AppCompatActivity {
 
             holder.titreArtiste.setText(mValues.get(position).getTitre() + " - " + mValues.get(position).getArtiste());
 
-            holder.itemView.setTag(mValues.get(position));
-            //holder.itemView.setOnClickListener(mOnClickListener);
+            holder.itemView.setTag(mValues.get(position).getId());
+            holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override

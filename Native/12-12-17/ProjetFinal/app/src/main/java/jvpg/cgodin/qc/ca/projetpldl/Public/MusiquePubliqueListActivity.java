@@ -104,6 +104,7 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(MusiquePubliqueDetailFragment.ARG_ITEM_ID, item);
+                    arguments.putString(MusiquePubliqueDetailFragment.ARG_ACTION_NAME,MusiquePubliqueDetailFragment.ARG_ACTION_PUBLIC);
                     MusiquePubliqueDetailFragment fragment = new MusiquePubliqueDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -113,7 +114,7 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, MusiquePubliqueDetailActivity.class);
                     intent.putExtra(MusiquePubliqueDetailFragment.ARG_ITEM_ID, item);
-
+                    intent.putExtra(MusiquePubliqueDetailFragment.ARG_ACTION_NAME,MusiquePubliqueDetailFragment.ARG_ACTION_PUBLIC);
                     context.startActivity(intent);
                 }
             }

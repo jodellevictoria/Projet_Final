@@ -107,14 +107,14 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Musiques find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<Musiques> findAll() {
         return super.findAll();
     }
@@ -204,7 +204,14 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
             
         }
         
+        if(musiqueFound != null){
+            Ticket ticket = tickets.get(noTicket);
         
+            if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil() && musiqueFound.getProprietaire() == idUser){
+                musique = musiqueFound;
+                tickets.remove(noTicket);
+            }
+        }
         
         return musique;
     }

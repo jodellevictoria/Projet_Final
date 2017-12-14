@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.VideoView;
 
@@ -32,13 +33,19 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import jvpg.cgodin.qc.ca.projetpldl.Config;
+import jvpg.cgodin.qc.ca.projetpldl.Private.MusiquesUtilListActivity;
 import jvpg.cgodin.qc.ca.projetpldl.R;
 import jvpg.cgodin.qc.ca.projetpldl.dummy.DummyContent;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Musique;
+
+import static jvpg.cgodin.qc.ca.projetpldl.MainActivity.utilConnecte;
 
 /**
  * A fragment representing a single Musique detail screen.
@@ -52,8 +59,14 @@ public class MusiquePubliqueDetailFragment extends Fragment {
 
 
 
-
     public static final String ARG_ITEM_ID = "item_id";
+
+    public static final String ARG_ACTION_PUBLIC = "PUBLIC";
+    public static final String ARG_ACTION_UTIL = "UTIL";
+    public static final String ARG_ACTION_LIST = "LIST";
+
+
+    public static final String ARG_ACTION_NAME = "action_name";
 
     /**
      * The dummy content this fragment is presenting.
@@ -61,20 +74,25 @@ public class MusiquePubliqueDetailFragment extends Fragment {
     private DummyContent.DummyItem mItem;
     private Musique musique;
     private String idMusique;
+    private String action;
 
     TextView txtTitre;
     TextView txtArtiste;
     TextView txtProprietaire;
     ImageView imgVignette;
-    ToggleButton togglePublique;
-    ToggleButton toggleActive;
-    YouTubePlayerView videoYoutubeMusique;
     YouTubePlayerSupportFragment mYoutubePlayerFragment;
     YouTubePlayer.OnInitializedListener onInitializedListener;
 
     private String url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/musiquePublique/";
-    //private List<Musique> musiquesPubliques = new ArrayList<Musique>();
+    String urlTicket = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/utilisateurs/GetTicket/";
+    String params = "";
+    String paramsService = "";
+    String fluxJSONTicket = "";
     String fluxJSON = "";
+
+    int cle;
+    int noTicket;
+    String chaineConfirmation;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -94,8 +112,23 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             //mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
             idMusique = getArguments().getString(ARG_ITEM_ID);
 
+            action = getArguments().getString(ARG_ACTION_NAME);
+            Log.i("Action",action);
             Activity activity = this.getActivity();
-            new GGDownloadTask().execute("test");
+
+            switch(action){
+                case ARG_ACTION_UTIL:
+                    doUtilAction();
+                    break;
+                case ARG_ACTION_PUBLIC:
+                    doPublicAction();
+                    break;
+                case ARG_ACTION_LIST:
+                    doListAction();
+                    break;
+            }
+
+
         }
     }
 
@@ -199,6 +232,94 @@ public class MusiquePubliqueDetailFragment extends Fragment {
         }
     }
 
+    public void useTicket(){
+        try {
+            JSONObject jObj = new JSONObject(fluxJSONTicket);
+
+            cle = jObj.getInt("cle");
+            noTicket = jObj.getInt("noTicket");
+
+            if(noTicket != -1){
+                String cleMDP = cle + utilConnecte.getMotDePasse();
+                try {
+                    MessageDigest m= null;
+                    m = MessageDigest.getInstance("MD5");
+                    m.update(cleMDP.getBytes(),0,cleMDP.length());
+                    chaineConfirmation = new BigInteger(1,m.digest()).toString(16);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                new GGDownloadTask().execute("test");
+
+            }
+            else{
+                Toast.makeText(getContext(), "Impossible de générer un ticket", Toast.LENGTH_SHORT).show();
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class GGDownloadTaskTicket extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            params = utilConnecte.getCourriel();
+        }
+
+        //cette méthode prend en argument un tableau illimité de chaines de caractères
+        @Override
+        protected String doInBackground(String... params) {
+            String resultString = null;
+            resultString = getJSON();
+            fluxJSONTicket = resultString;
+            return resultString;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //Toast.makeText(LoginActivity.this, "Fin de l'exécution du traitement en arrière-plan", Toast.LENGTH_SHORT).show();
+            //doAction();
+            useTicket();
+            Log.i("JSON",fluxJSONTicket);
+        }
+
+        public String getJSON() {
+            HttpURLConnection c = null;
+            String resultat = "";
+            try {
+                URL u = new URL(urlTicket+params);
+                c = (HttpURLConnection) u.openConnection();
+                c.setRequestMethod("GET");
+                StringBuffer sb = new StringBuffer();
+                InputStream is = null;
+
+                is = new BufferedInputStream(c.getInputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = "";
+                while ((line = br.readLine()) != null){
+                    sb.append(line);
+                }
+                resultat = sb.toString();
+            }
+            catch(Exception e){
+                Log.e("Read JSON Fail", Log.getStackTraceString(e));
+            }
+
+            return resultat;
+        }
+
+    }
+
 
     public class GGDownloadTask extends AsyncTask<String, Integer, String> {
 
@@ -206,6 +327,9 @@ public class MusiquePubliqueDetailFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             //params = loginCourriel.getText().toString() + "/" + loginMotDePasse.getText().toString();
+            paramsService = action.equals(ARG_ACTION_PUBLIC) ? idMusique :
+                    action.equals(ARG_ACTION_UTIL) ? noTicket + "/" + chaineConfirmation + "/" + utilConnecte.getId() + "/" + idMusique : idMusique;
+
         }
 
         //cette méthode prend en argument un tableau illimité de chaines de caractères
@@ -214,6 +338,8 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             String resultString = null;
             resultString = getJSON();
             fluxJSON = resultString;
+
+            Log.i("ParamsService",paramsService);
             return resultString;
         }
 
@@ -239,7 +365,7 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             HttpURLConnection c = null;
             String resultat = "";
             try {
-                URL u = new URL(url+idMusique);
+                URL u = new URL(url+paramsService);
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 StringBuffer sb = new StringBuffer();
@@ -260,5 +386,21 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             return resultat;
         }
 
+    }
+
+    private void doPublicAction(){
+        url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/musiquePublique/";
+        new GGDownloadTask().execute("test");
+    }
+
+    private void doListAction(){
+        url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/";
+        new GGDownloadTask().execute("test");
+    }
+
+    private void doUtilAction(){
+        //{noTicket}/{chaineConfirmation}/{idUser}/{idMusique}
+        url = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/musiques/consulterMusique/";
+        new GGDownloadTaskTicket().execute("test");
     }
 }

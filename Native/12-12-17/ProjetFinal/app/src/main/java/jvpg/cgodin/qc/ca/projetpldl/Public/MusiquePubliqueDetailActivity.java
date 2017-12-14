@@ -42,6 +42,8 @@ public class MusiquePubliqueDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putString(MusiquePubliqueDetailFragment.ARG_ITEM_ID,
                     getIntent().getStringExtra(MusiquePubliqueDetailFragment.ARG_ITEM_ID));
+            arguments.putString(MusiquePubliqueDetailFragment.ARG_ACTION_NAME,
+                    getIntent().getStringExtra(MusiquePubliqueDetailFragment.ARG_ACTION_NAME));
             MusiquePubliqueDetailFragment fragment = new MusiquePubliqueDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
