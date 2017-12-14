@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         btnMusiquesPubliques = (Button) findViewById(R.id.btnMusiquesPubliques);
         btnListesPubliques = (Button) findViewById(R.id.btnListesPubliques);
 
+        btnSearchYT = (Button) findViewById(R.id.btnSearchYT);
         btnMusiquesUtil = (Button) findViewById(R.id.btnVoirMesMusiques);
         btnListesUtil = (Button) findViewById(R.id.btnVoirMesListes);
         btnModifierUtil = (Button) findViewById(R.id.btnModifierProfil);
