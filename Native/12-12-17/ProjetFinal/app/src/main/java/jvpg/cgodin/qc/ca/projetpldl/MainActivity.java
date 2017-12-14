@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import jvpg.cgodin.qc.ca.projetpldl.Private.ListesUtilActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Private.MusiquesUtilListActivity;
+import jvpg.cgodin.qc.ca.projetpldl.Private.SearchYTActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Public.ListesPubliquesActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueListActivity;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Utilisateur;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnMusiquesUtil;
     Button btnListesUtil;
     Button btnModifierUtil;
+    Button btnSearchYT;
 
     TextView welcomeText;
     TextView infoText;
@@ -80,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnSearchYT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SearchYTActivity.class);
+                startActivity(i);
+            }
+        });
+
         btnMusiquesUtil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
             btnLogin.setText("Déconnecter");
             welcomeText.setText("Bienvenue " + utilConnecte.getAlias());
             infoText.setText("");
+            btnSearchYT.setEnabled(false);
             btnMusiquesUtil.setEnabled(true);
             btnListesUtil.setEnabled(true);
             btnModifierUtil.setEnabled(true);
@@ -135,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             btnLogin.setText("Se connecter");
             welcomeText.setText("Bienvenue");
             infoText.setText("Veuillez vous connecter pour utiliser les fonctionalités suivantes");
+            btnSearchYT.setEnabled(false);
             btnMusiquesUtil.setEnabled(false);
             btnListesUtil.setEnabled(false);
             btnModifierUtil.setEnabled(false);

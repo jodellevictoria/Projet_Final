@@ -79,7 +79,8 @@
         </activity>
         <activity android:name=".Private.ModifierListActivity" />
         <activity android:name=".Private.ModifierMusiqueActivity" />
-        <activity android:name=".Private.AddMusiqueActivity"></activity>
+        <activity android:name=".Private.AddMusiqueActivity" />
+        <activity android:name=".Private.SearchYTActivity"></activity>
     </application>
 
 </manifest>
