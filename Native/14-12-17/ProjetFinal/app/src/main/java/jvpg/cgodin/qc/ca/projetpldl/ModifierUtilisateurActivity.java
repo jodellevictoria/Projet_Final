@@ -217,6 +217,7 @@ public class ModifierUtilisateurActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 int result=data.getIntExtra("result",1);
                 avatarChosen = result;
+                changePicture();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
