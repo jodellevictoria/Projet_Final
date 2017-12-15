@@ -35,21 +35,6 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/etAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="108dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/btnModifierCompte2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <EditText
         android:id="@+id/etPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,14 +81,14 @@
     <TextView
         android:id="@+id/tvCourriel"
         android:layout_width="107dp"
-        android:layout_height="43dp"
+        android:layout_height="41dp"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="8dp"
         android:text="Courriel"
         app:layout_constraintBottom_toTopOf="@+id/tvPassword"
         app:layout_constraintEnd_toStartOf="@+id/etCourriel"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.351"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -124,12 +109,9 @@
         android:layout_width="107dp"
         android:layout_height="37dp"
         android:layout_marginBottom="104dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:text="Avatar"
         app:layout_constraintBottom_toTopOf="@+id/btnModifierCompte2"
-        app:layout_constraintEnd_toStartOf="@+id/etAvatar"
-        app:layout_constraintHorizontal_bias="0.266"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -146,4 +128,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNom"
         app:layout_constraintVertical_bias="0.972" />
+
+    <ImageButton
+        android:id="@+id/etAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnModifierCompte2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toEndOf="@+id/tvAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword"
+        app:layout_constraintVertical_bias="0.15"
+        app:srcCompat="@mipmap/ic_launcher" />
 </android.support.constraint.ConstraintLayout>
