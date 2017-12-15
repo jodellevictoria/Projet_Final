@@ -52,7 +52,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
  
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, Listesdelecture entity) {
         super.edit(entity);
     }
@@ -65,14 +65,14 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
  
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Listesdelecture find(@PathParam("id") Integer id) {
         return super.find(id);
     }
  
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<Listesdelecture> findAll() {
         return super.findAll();
     }

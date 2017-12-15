@@ -72,7 +72,7 @@ public class AddMusiqueActivity extends AppCompatActivity {
         toggleActif = (ToggleButton) findViewById(R.id.toggleActif);
         btnSave = (Button) findViewById(R.id.btnSave);
 
-        byte[] decodedString = Base64.decode(getIntent().getStringExtra("vignette"), Base64.DEFAULT);
+        byte[] decodedString = Base64.decode(getIntent().getStringExtra("vignetteEncoded"), Base64.DEFAULT);
         Log.e("biggggggggggggg",getIntent().getStringExtra("vignette")+"");
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         imgVignette.setImageBitmap(decodedByte);
@@ -122,23 +122,42 @@ public class AddMusiqueActivity extends AppCompatActivity {
             ToggleButton toggleActif;
             Button btnSave;*/
 
+
+            String titreTempo=addMusiqueTitre.getText().toString();
+            String artisteTempo=addMusiqueArtiste.getText().toString();
             String txtURLTempo=txtURL.getText().toString();
             String vignetteTempo=getIntent().getStringExtra("vignette").toString();
 
-            vignetteTempo = vignetteTempo.replaceAll("\\+", "Password1");
-            vignetteTempo = vignetteTempo.replaceAll("/", "Password2");
-            vignetteTempo = vignetteTempo.replaceAll("=", "Password3");
-            vignetteTempo = vignetteTempo.replaceAll(" ", "");
-
-
 
             try {
-
-                txtURLTempo = URLEncoder.encode(txtURL.getText().toString(), "UTF-8")+"";
+                titreTempo = URLEncoder.encode(titreTempo, "UTF-8")+"";
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            try {
+                artisteTempo = URLEncoder.encode(artisteTempo, "UTF-8")+"";
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            try {
+                txtURLTempo = URLEncoder.encode(txtURLTempo, "UTF-8")+"";
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            try {
+                vignetteTempo = URLEncoder.encode(vignetteTempo, "UTF-8")+"";
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
 
+
+
+
+
+            /*vignetteTempo = vignetteTempo.replaceAll("\\+", "Password1");
+            vignetteTempo = vignetteTempo.replaceAll("/", "Password2");
+            vignetteTempo = vignetteTempo.replaceAll("=", "Password3");
+            vignetteTempo = vignetteTempo.replaceAll(" ", "");*/
 
             String lol = "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQHPassword22wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB" +
                     "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQHPassword2wAARCABaAHgDASIA" +
@@ -357,9 +376,11 @@ public class AddMusiqueActivity extends AppCompatActivity {
                     "9YuPassword2Password2QlmfgBwPassword2VoN4LB5zl70T3sldrRuNPassword12i20SsuZHzPassword";
 
             lol=vignetteTempo;
-            params = noTicket + "/" + chaineConfirmation + "/" + utilConnecte.getId()+"/"+addMusiqueTitre.getText()+"/"
-                    +addMusiqueArtiste.getText()+"/"
-                    + txtURLTempo+"/"+"vigniette"+"/"+((Boolean)togglePublique.isChecked()).toString()+"/"
+
+
+            //creerMusique/{noTicket}/{chaineConfirmation}/{idUser}/{titre}/{artiste}/{musique}/{vignette}/{publique}/{active}
+            params = noTicket + "/" + chaineConfirmation + "/" + utilConnecte.getId()+"/"+titreTempo+"/"
+                    +artisteTempo+"/" + txtURLTempo+"/"+vignetteTempo+"/"+((Boolean)togglePublique.isChecked()).toString()+"/"
                     +((Boolean)toggleActif.isChecked()).toString();
             Log.e("PARAMMMMMMMM2",params+"");
             Log.e("PARAMMMMMMMM",lol+"");

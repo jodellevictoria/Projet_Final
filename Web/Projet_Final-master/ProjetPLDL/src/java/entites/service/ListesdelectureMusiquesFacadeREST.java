@@ -608,7 +608,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                     
                     Listesdelecture listesdelecture2 = new Listesdelecture();
                     listesdelecture2.setProprietaire(idUser);
-                    listesdelecture2.setNom(listesdelecture.getNom());
+                    listesdelecture2.setNom(listesdelecture.getNom() + "-Copie");
                     listesdelecture2.setPublique(listesdelecture.getPublique());
                     listesdelecture2.setActive(listesdelecture.getActive());
                     listesdelecture2.setDate(new Date());

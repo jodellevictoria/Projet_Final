@@ -152,7 +152,8 @@ public class SearchYTActivity extends AppCompatActivity {
                 //OUUUUUUUUU
                 s.setMusique("http://www.youtube.com/embed/"+items.getJSONObject(i).getJSONObject("id").getString("videoId"));
                 s.setTitre(items.getJSONObject(i).getJSONObject("snippet").get("title")+"");
-                s.setVignette("null");
+                s.setVignette(items.getJSONObject(i).getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("default").getString("url"));
+                s.setVignetteEncoded("null");
                 //Toast.makeText(MainActivity2.this, "Item "+i+" : ", Toast.LENGTH_SHORT).show();
                 // Toast.makeText(MainActivity2.this, "Title : "+items.getJSONObject(i).getJSONObject("snippet").get("title"), Toast.LENGTH_SHORT).show();
                 // Toast.makeText(MainActivity2.this, "Description : "+items.getJSONObject(i).getJSONObject("snippet").get("description"), Toast.LENGTH_SHORT).show();
@@ -212,7 +213,7 @@ public class SearchYTActivity extends AppCompatActivity {
                 byte[] b = baos.toByteArray();
                 String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
                 //Toast.makeText(MainActivity2.this, encodedImage, Toast.LENGTH_SHORT).show();
-                lstSearchBarItem.get((lstSearchBarItem.size()-1)-compteurTempo).setVignette(encodedImage);
+                lstSearchBarItem.get((lstSearchBarItem.size()-1)-compteurTempo).setVignetteEncoded(encodedImage);
                 compteurTempo++;
                 if(compteurTempo==lstSearchBarItem.size())
                 {
@@ -305,7 +306,7 @@ public class SearchYTActivity extends AppCompatActivity {
         public void onBindViewHolder(PlanetViewHolder holder, int position) {
 
 
-            byte[] decodedString = Base64.decode(lstSearchBarItem.get(position).getVignette(), Base64.DEFAULT);
+            byte[] decodedString = Base64.decode(lstSearchBarItem.get(position).getVignetteEncoded(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.ivVignette.setImageBitmap(decodedByte);
 
@@ -320,6 +321,7 @@ public class SearchYTActivity extends AppCompatActivity {
                     intent.putExtra("titre",s.getTitre());
                     intent.putExtra("musique",s.getMusique());
                     intent.putExtra("vignette",s.getVignette());
+                    intent.putExtra("vignetteEncoded",s.getVignetteEncoded());
                     startActivity(intent);
                 }
             });

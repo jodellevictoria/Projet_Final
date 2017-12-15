@@ -44,7 +44,7 @@ public class AvatarFacadeREST extends AbstractFacade<Avatar> {
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, Avatar entity) {
         super.edit(entity);
     }
@@ -57,7 +57,7 @@ public class AvatarFacadeREST extends AbstractFacade<Avatar> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Avatar find(@PathParam("id") Integer id) {
         return super.find(id);
     }

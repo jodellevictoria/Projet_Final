@@ -1,6 +1,8 @@
 package jvpg.cgodin.qc.ca.projetpldl.Private;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import jvpg.cgodin.qc.ca.projetpldl.Public.MusiquePubliqueDetailFragment;
 import jvpg.cgodin.qc.ca.projetpldl.R;
 
 import jvpg.cgodin.qc.ca.projetpldl.Private.dummy.DummyContent;
+import jvpg.cgodin.qc.ca.projetpldl.entities.ListeDeLecture;
 import jvpg.cgodin.qc.ca.projetpldl.entities.Musique;
 
 import java.io.BufferedInputStream;
@@ -75,6 +78,15 @@ public class ListeUtilContentListActivity extends AppCompatActivity {
     int noTicket;
     String chaineConfirmation;
 
+    String urlCOPY = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/listesdelecturemusiques/copierListeeALaListe/";
+    String urlTicketCOPY = "http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/utilisateurs/GetTicket/";
+    String paramsCOPY = "";
+    String fluxJSONTicketCOPY = "";
+    String fluxJSONCOPY = "";
+    int cleCOPY;
+    int noTicketCOPY;
+    String chaineConfirmationCOPY;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +108,42 @@ public class ListeUtilContentListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ModifierListActivity.class);
-                i.putExtra("idListe",idListe);
-                startActivityForResult(i, 1);
+                startActivity(i);
+                //i.putExtra("idListe",idListe);
                 //adapter.notifyDataSetChanged();
+            }
+        });
+
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fabCopyList);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ListeUtilContentListActivity.this);
+
+                builder.setTitle("Copier toute la liste vers une autre liste");
+                builder.setMessage("Toutes les musiques dans liste de lecture seront copiés vers une nouvelle liste de lecture " +
+                        "avec le même nom et \"- Copie\". Êtes-vous sûr(e) de vouloir copier la liste?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing but close the dialog
+                        new GGDownloadTaskTicketCOPY().execute("test");
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
 
@@ -399,5 +444,153 @@ public class ListeUtilContentListActivity extends AppCompatActivity {
         if(resultCode == 0){
             recreate();
         }
+    }
+
+    public class GGDownloadTaskCOPY extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            paramsCOPY =  noTicketCOPY + "/" + chaineConfirmationCOPY + "/" + utilConnecte.getId() + "/" + idListe;
+        }
+
+        //cette méthode prend en argument un tableau illimité de chaines de caractères
+        @Override
+        protected String doInBackground(String... params) {
+            String resultString = null;
+            resultString = getJSON();
+            fluxJSONCOPY = resultString;
+            return resultString;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //fillList();
+            Log.i("JSON",fluxJSONCOPY);
+            View recyclerView = findViewById(R.id.listeutilcontent_list);
+            assert recyclerView != null;
+            setupRecyclerView((RecyclerView) recyclerView);
+        }
+
+        public String getJSON() {
+            HttpURLConnection c = null;
+            String resultat = "";
+            try {
+                URL u = new URL(urlCOPY+paramsCOPY);
+                Log.i("getJSON",urlCOPY+paramsCOPY);
+                c = (HttpURLConnection) u.openConnection();
+                c.setRequestMethod("GET");
+                StringBuffer sb = new StringBuffer();
+                InputStream is = null;
+
+                is = new BufferedInputStream(c.getInputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = "";
+                while ((line = br.readLine()) != null){
+                    sb.append(line);
+                }
+                resultat = sb.toString();
+            }
+            catch(Exception e){
+                Log.e("Read JSON Fail", Log.getStackTraceString(e));
+            }
+
+            return resultat;
+        }
+
+    }
+
+    public void useTicketCOPY(){
+        try {
+            JSONObject jObj = new JSONObject(fluxJSONTicketCOPY);
+
+            cleCOPY = jObj.getInt("cle");
+            noTicketCOPY = jObj.getInt("noTicket");
+
+            if(noTicketCOPY != -1){
+                String cleMDP = cleCOPY + utilConnecte.getMotDePasse();
+                try {
+                    MessageDigest m= null;
+                    m = MessageDigest.getInstance("MD5");
+                    m.update(cleMDP.getBytes(),0,cleMDP.length());
+                    chaineConfirmationCOPY = new BigInteger(1,m.digest()).toString(16);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                new GGDownloadTaskCOPY().execute("test");
+
+            }
+            else{
+                Toast.makeText(this, "Impossible de générer un ticket", Toast.LENGTH_SHORT).show();
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class GGDownloadTaskTicketCOPY extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            paramsCOPY = utilConnecte.getCourriel();
+        }
+
+        //cette méthode prend en argument un tableau illimité de chaines de caractères
+        @Override
+        protected String doInBackground(String... params) {
+            String resultString = null;
+            resultString = getJSON();
+            fluxJSONTicketCOPY = resultString;
+            return resultString;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //Toast.makeText(LoginActivity.this, "Fin de l'exécution du traitement en arrière-plan", Toast.LENGTH_SHORT).show();
+            //doAction();
+            useTicketCOPY();
+            Log.i("JSON",fluxJSONTicketCOPY);
+        }
+
+        public String getJSON() {
+            HttpURLConnection c = null;
+            String resultat = "";
+            try {
+                URL u = new URL(urlTicketCOPY+paramsCOPY);
+                c = (HttpURLConnection) u.openConnection();
+                c.setRequestMethod("GET");
+                StringBuffer sb = new StringBuffer();
+                InputStream is = null;
+
+                is = new BufferedInputStream(c.getInputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = "";
+                while ((line = br.readLine()) != null){
+                    sb.append(line);
+                }
+                resultat = sb.toString();
+            }
+            catch(Exception e){
+                Log.e("Read JSON Fail", Log.getStackTraceString(e));
+            }
+
+            return resultat;
+        }
+
     }
 }

@@ -32,6 +32,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.DatatypeConverter;
 import org.hibernate.validator.internal.util.logging.Log;
 
 /**
@@ -77,10 +78,10 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
             String vignettetoAdd = "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";
             Musiques musiqueAjout = new Musiques();
             musiqueAjout.setProprietaire(idUser);
-            musiqueAjout.setTitre(titre);
-            musiqueAjout.setArtiste(artiste);
+            musiqueAjout.setTitre(URLDecoder.decode(titre, "UTF-8"));
+            musiqueAjout.setArtiste(URLDecoder.decode(artiste, "UTF-8"));
             musiqueAjout.setMusique(URLDecoder.decode(musique, "UTF-8"));
-            musiqueAjout.setVignette(vignettetoAdd);
+            musiqueAjout.setVignette(getByteArrayFromImageURL(URLDecoder.decode(vignette, "UTF-8")));
             musiqueAjout.setPublique(publique);
             musiqueAjout.setActive(active);
             musiqueAjout.setDate(new Date());
@@ -106,6 +107,29 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
         return messageRetour;
     }
 
+    private String getByteArrayFromImageURL(String url) {
+
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+            InputStream is = ucon.getInputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int read = 0;
+            while ((read = is.read(buffer, 0, buffer.length)) != -1) {
+                baos.write(buffer, 0, read);
+            }
+            baos.flush();
+            return DatatypeConverter.printBase64Binary(baos.toByteArray());
+
+            //return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+            //return new String(baos.toByteArray(), Charset.defaultCharset()); 
+        } catch (Exception e) {
+            //Log.d("Error", e.toString());
+        }
+        return null;
+    }
+    
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -12,16 +12,25 @@ public class SearchBarItem {
     String titre;
     String musique;
     String vignette;
+    String vignetteEncoded;
 
     public SearchBarItem() {
     }
 
-    public SearchBarItem(String titre, String musique, String vignette) {
+    public SearchBarItem(String titre, String musique, String vignette, String vignetteEncoded) {
         this.titre = titre;
         this.musique = musique;
         this.vignette = vignette;
+        this.vignetteEncoded = vignetteEncoded;
     }
 
+    public String getVignetteEncoded() {
+        return vignetteEncoded;
+    }
+
+    public void setVignetteEncoded(String vignetteEncoded) {
+        this.vignetteEncoded = vignetteEncoded;
+    }
     public String getTitre() {
         return titre;
     }

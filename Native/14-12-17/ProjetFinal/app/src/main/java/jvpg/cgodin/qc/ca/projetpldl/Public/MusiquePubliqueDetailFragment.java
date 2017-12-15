@@ -47,6 +47,7 @@ import java.security.NoSuchAlgorithmException;
 import jvpg.cgodin.qc.ca.projetpldl.Config;
 import jvpg.cgodin.qc.ca.projetpldl.Private.ChooseListeActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Private.ListeUtilContentListActivity;
+import jvpg.cgodin.qc.ca.projetpldl.Private.ModifierMusiqueActivity;
 import jvpg.cgodin.qc.ca.projetpldl.Private.MusiquesUtilListActivity;
 import jvpg.cgodin.qc.ca.projetpldl.R;
 import jvpg.cgodin.qc.ca.projetpldl.Test;
@@ -187,7 +188,9 @@ public class MusiquePubliqueDetailFragment extends Fragment {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getContext(), ModifierMusiqueActivity.class);
+                intent.putExtra("idMusique", musique.getId());
+                startActivity(intent);
             }
         });
 
@@ -206,10 +209,10 @@ public class MusiquePubliqueDetailFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                builder.setTitle("Confirm");
-                builder.setMessage("Are you sure?");
+                builder.setTitle("Retirer la musique de la liste");
+                builder.setMessage("Êtes-vous sûr(e) de vouloir retirer " + txtTitre.getText().toString() +" de la liste de lecture?");
 
-                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
@@ -218,7 +221,7 @@ public class MusiquePubliqueDetailFragment extends Fragment {
                     }
                 });
 
-                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
