@@ -271,7 +271,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                         if(boolTempo==true)
                         {
                             super.remove(super.find(listesdelectureMusiquesPK));
-                            messageRetour = "la musique a été supprimée de la liste";
+                            messageRetour = "la musique a été retirée de la liste";
                             tickets.remove(noTicket);
                         }
                         else
@@ -401,7 +401,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                                 listesdelectureMusiques2.setListesdelectureMusiquesPK(listesdelectureMusiquesPK2);
                                 listesdelectureMusiques2.setDate(new Date());
                                 em.persist(listesdelectureMusiques2);
-                                messageRetour = "la musique a été ajoutée a la nouvelle liste";
+                                messageRetour = "la musique a été transférée à une autre liste";
                                 tickets.remove(noTicket);
                             }                          
                            
@@ -529,7 +529,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                                 listesdelectureMusiques2.setListesdelectureMusiquesPK(listesdelectureMusiquesPK2);
                                 listesdelectureMusiques2.setDate(new Date());
                                 em.persist(listesdelectureMusiques2);
-                                messageRetour = "la musique a été ajoutée a la nouvelle liste";
+                                messageRetour = "la musique a été copiée à une autre liste";
                                 tickets.remove(noTicket);
                             }                          
                            
@@ -608,7 +608,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                     
                     Listesdelecture listesdelecture2 = new Listesdelecture();
                     listesdelecture2.setProprietaire(idUser);
-                    listesdelecture2.setNom(listesdelecture.getNom() + "-Copie");
+                    listesdelecture2.setNom(listesdelecture.getNom() + " COPIE 2017");
                     listesdelecture2.setPublique(listesdelecture.getPublique());
                     listesdelecture2.setActive(listesdelecture.getActive());
                     listesdelecture2.setDate(new Date());
@@ -636,7 +636,7 @@ public class ListesdelectureMusiquesFacadeREST extends AbstractFacade<Listesdele
                         listesdelectureMusiques2.setListesdelectureMusiquesPK(listesdelectureMusiquesPK2);
                         listesdelectureMusiques2.setDate(new Date());
                         em.persist(listesdelectureMusiques2);                     
-                        messageRetour = "les musique(s) a ont été ajoutée(s) a la nouvelle liste";
+                        messageRetour = "Une copie de cette liste de lecture a été créé";
                                                                        
                     }                     
                 }                
