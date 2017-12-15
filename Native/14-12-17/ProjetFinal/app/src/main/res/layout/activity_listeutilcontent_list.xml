@@ -42,7 +42,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@android:color/darker_gray"
-        app:srcCompat="@drawable/ic_settings_black_24dp" />
+        app:srcCompat="@android:drawable/ic_dialog_dialer" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabCopyList"

@@ -82,7 +82,8 @@
         <activity android:name=".Private.AddMusiqueActivity" />
         <activity android:name=".Private.SearchYTActivity" />
         <activity android:name=".Private.AddListeActivity" />
-        <activity android:name=".Private.ChooseListeActivity"></activity>
+        <activity android:name=".Private.ChooseListeActivity" />
+        <activity android:name=".Private.SelectAvatarActivity"></activity>
     </application>
 
 </manifest>

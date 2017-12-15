@@ -358,12 +358,11 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
     }
     
     @GET
-    @Path("modifierMusique/{noTicket}/{chaineConfirmation}/{Id}/{IdUtil}/{Titre}/{Artiste}/{Musique}/{Vignette}/{Publique}/{Active}")
+    @Path("modifierMusique/{noTicket}/{chaineConfirmation}/{Id}/{IdUtil}/{Titre}/{Artiste}/{Publique}/{Active}")
     @Consumes({MediaType.TEXT_PLAIN})
     @Produces({MediaType.TEXT_PLAIN})
     public String modifierMusique(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,  
-            @PathParam("Id") Integer id,@PathParam("IdUtil") Integer IdUtil, @PathParam("Titre") String titre, @PathParam("Artiste") String artiste, @PathParam("Musique") String musiqueUrl,
-            @PathParam("Vignette") String vignette, @PathParam("Publique") boolean publique , @PathParam("Active") boolean active ) {
+            @PathParam("Id") Integer id,@PathParam("IdUtil") Integer IdUtil, @PathParam("Titre") String titre, @PathParam("Artiste") String artiste, @PathParam("Publique") boolean publique , @PathParam("Active") boolean active ) throws UnsupportedEncodingException {
         String messageRetour = "";
         Musiques musique = null;
         Query q = em.createNamedQuery("Musiques.findById");
@@ -381,10 +380,10 @@ public class MusiquesFacadeREST extends AbstractFacade<Musiques> {
         if(IdUtil == musique.getProprietaire())
         {
             if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && IdUtil == ticket.getIdUtil()){            
-            musique.setTitre(titre);
-            musique.setArtiste(artiste);
-            musique.setMusique(musiqueUrl);
-            musique.setVignette(vignette);
+            musique.setTitre(URLDecoder.decode(titre, "UTF-8"));
+            musique.setArtiste(URLDecoder.decode(artiste, "UTF-8"));
+            musique.setMusique(musique.getMusique());
+            musique.setVignette(musique.getVignette());
             musique.setPublique(publique);
             musique.setActive(active);
             super.edit(musique);

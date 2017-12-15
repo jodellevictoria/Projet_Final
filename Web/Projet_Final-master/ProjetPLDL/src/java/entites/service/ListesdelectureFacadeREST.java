@@ -11,6 +11,8 @@ import entites.ListesdelectureMusiquesPK;
 import entites.Musiques;
 import entites.Ticket;
 import static entites.service.UtilisateursFacadeREST.tickets;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -465,7 +467,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
     @Produces({MediaType.TEXT_PLAIN})
     public String creerListeDeLecture(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
             @PathParam("idUser") Integer idUser, @PathParam("nom") String nom,
-            @PathParam("publique") boolean publique, @PathParam("active") boolean active) {
+            @PathParam("publique") boolean publique, @PathParam("active") boolean active) throws UnsupportedEncodingException {
         String messageRetour = "empty";
        
         Ticket ticket = tickets.get(noTicket);
@@ -474,7 +476,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUser == ticket.getIdUtil()){
             Listesdelecture listesdelecture = new Listesdelecture();
             listesdelecture.setProprietaire(idUser);
-            listesdelecture.setNom(nom);
+            listesdelecture.setNom(URLDecoder.decode(nom, "UTF-8"));
             listesdelecture.setPublique(publique);
             listesdelecture.setActive(active);
             listesdelecture.setDate(new Date());
@@ -506,7 +508,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
     @Consumes({MediaType.TEXT_PLAIN})
     @Produces({MediaType.TEXT_PLAIN})
     public String modifierProfil(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,  
-            @PathParam("Id") Integer id,@PathParam("IdUtil") Integer IdUtil, @PathParam("Nom") String nom, @PathParam("Publique") boolean publique , @PathParam("Active") boolean active ) {
+            @PathParam("Id") Integer id,@PathParam("IdUtil") Integer IdUtil, @PathParam("Nom") String nom, @PathParam("Publique") boolean publique , @PathParam("Active") boolean active ) throws UnsupportedEncodingException {
  
         String messageRetour = "";
         Listesdelecture listesdelecture = null;
@@ -526,7 +528,7 @@ public class ListesdelectureFacadeREST extends AbstractFacade<Listesdelecture> {
         {
             if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && IdUtil == ticket.getIdUtil())
             {            
-                listesdelecture.setNom(nom);
+                listesdelecture.setNom(URLDecoder.decode(nom, "UTF-8"));
                 listesdelecture.setPublique(publique);
                 listesdelecture.setActive(active);
                 super.edit(listesdelecture);

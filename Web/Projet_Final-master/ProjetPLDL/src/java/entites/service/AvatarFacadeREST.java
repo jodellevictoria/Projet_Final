@@ -64,7 +64,7 @@ public class AvatarFacadeREST extends AbstractFacade<Avatar> {
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<Avatar> findAll() {
         return super.findAll();
     }
