@@ -99,7 +99,7 @@ public class SearchYTActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.searchbar, menu);
-        Toast.makeText(SearchYTActivity.this, "Entrez ce que vous chercher dans la barre de recherche...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(SearchYTActivity.this, "Entrez ce que vous cherchez dans la barre de recherche...", Toast.LENGTH_SHORT).show();
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =(SearchManager) getSystemService(Context.SEARCH_SERVICE);

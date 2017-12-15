@@ -93,6 +93,7 @@ public class ListeUtilContentListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listeutilcontent_list);
 
         Bundle extras = getIntent().getExtras();
+        new GetNameOfPlaylist().execute("test");
 
         if (extras != null) {
             idListe = Integer.parseInt(extras.getString("idListe"));
@@ -160,6 +161,70 @@ public class ListeUtilContentListActivity extends AppCompatActivity {
         /*View recyclerView = findViewById(R.id.listeutilcontent_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);*/
+    }
+
+    public class GetNameOfPlaylist extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //params = loginCourriel.getText().toString() + "/" + loginMotDePasse.getText().toString();
+        }
+
+        //cette méthode prend en argument un tableau illimité de chaines de caractères
+        @Override
+        protected String doInBackground(String... params) {
+            String resultString = null;
+            resultString = getJSON();
+            fluxJSON = resultString;
+            return resultString;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //Toast.makeText(LoginActivity.this, "Fin de l'exécution du traitement en arrière-plan", Toast.LENGTH_SHORT).show();
+            //doAction();
+            try {
+                JSONObject jObj = new JSONObject(fluxJSON);
+                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                toolbar.setTitle(jObj.getString("nom"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.i("JSON",fluxJSON);
+        }
+
+        public String getJSON() {
+            HttpURLConnection c = null;
+            String resultat = "";
+            try {
+                URL u = new URL("http://424v.cgodin.qc.ca:8086/ProjetPLDL/webresources/listesdelecture/"+idListe);
+                c = (HttpURLConnection) u.openConnection();
+                c.setRequestMethod("GET");
+                StringBuffer sb = new StringBuffer();
+                InputStream is = null;
+
+                is = new BufferedInputStream(c.getInputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = "";
+                while ((line = br.readLine()) != null){
+                    sb.append(line);
+                }
+                resultat = sb.toString();
+            }
+            catch(Exception e){
+                Log.e("Read JSON Fail", Log.getStackTraceString(e));
+            }
+
+            return resultat;
+        }
+
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {

@@ -61,7 +61,7 @@ public class MusiquePubliqueListActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        toolbar.setTitle("Musiques publiques");
 
         if (findViewById(R.id.musique_detail_container) != null) {
             // The detail container view will be present only in the

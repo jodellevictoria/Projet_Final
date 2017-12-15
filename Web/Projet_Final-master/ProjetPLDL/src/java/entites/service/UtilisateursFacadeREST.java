@@ -18,7 +18,9 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -237,7 +239,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         int width = 150;
         int height = 50;
         List arrayList = new ArrayList();
-        String capcode = "abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMONOPQURSTUVWXYZ0123456789!@#$%&*";
+        String capcode = "abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMONOPQURSTUVWXYZ0123456789";
         for (int i = 1; i < capcode.length() - 1; i++) {
             arrayList.add(capcode.charAt(i));
         }
@@ -337,7 +339,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
        
        
         TicketCaptchaReturn ticketCaptchaReturn = null;
-        if(utilisateurs==null && utilisateurs2==null && avatar<=36)
+        if(utilisateurs==null && avatar<=36)
         {
             boolean boolTempo = true;  
             for(int i =0;i<listTickets.size();i++ )
@@ -351,7 +353,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             }
            
             //flux = numTicket + nom + courriel + motDePasse + captcha2;
-            String motDePasseMD5 = "";
+            /*String motDePasseMD5 = "";
             try{
                 MessageDigest m=MessageDigest.getInstance("MD5");
                 m.update(motDePasse.getBytes(),0,motDePasse.length());
@@ -361,9 +363,9 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             }
             catch(Exception e){
  
-            }
+            }*/
             //    public Tickets(String numTicket, String nom, String courriel, String motDePasse, String captcha) {
-            ticket = new Tickets(numTicket,nom,courriel,motDePasseMD5,captcha2,avatar);
+            ticket = new Tickets(numTicket,nom,courriel,motDePasse,captcha2,avatar);
             listTickets.add(ticket);
             ticketCaptchaReturn = new TicketCaptchaReturn(ticket.getNumTicket(),ticket.getCaptcha(),imageString);
         }
@@ -393,7 +395,7 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
     @Produces({MediaType.TEXT_PLAIN})
     public String modifierProfil(@PathParam("noTicket") Integer noTicket, @PathParam("chaineConfirmation") String chaineConfirmation,
             @PathParam("idUtil") Integer idUtil, @PathParam("courriel") String courriel, @PathParam("motDePasse") String motDePasse,
-            @PathParam("alias") String alias, @PathParam("avatar") Integer avatar) {
+            @PathParam("alias") String alias, @PathParam("avatar") Integer avatar) throws UnsupportedEncodingException {
         String messageRetour = "";
         Utilisateurs util = null;
         Query q = em.createNamedQuery("Utilisateurs.findById");
@@ -409,8 +411,8 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
         Ticket ticket = tickets.get(noTicket);
         if(ticket != null && ticket.getChaineConfirmation().equals(chaineConfirmation) && idUtil == ticket.getIdUtil()){
             util.setCourriel(courriel);
-            util.setAlias(alias);
-            String motDePasseMD5 = "";
+            util.setAlias(URLDecoder.decode(alias, "UTF-8"));
+            /*String motDePasseMD5 = "";
             try{
                 MessageDigest m=MessageDigest.getInstance("MD5");
                 m.update(motDePasse.getBytes(),0,motDePasse.length());
@@ -419,9 +421,9 @@ public class UtilisateursFacadeREST extends AbstractFacade<Utilisateurs> {
             }
             catch(Exception e){
                 
-            }
+            }*/
                 
-            util.setMotDePasse(motDePasseMD5);
+            util.setMotDePasse(motDePasse);
             util.setAvatar(avatar);
             super.edit(util);
             messageRetour = "L'utilisateur a été modifié";

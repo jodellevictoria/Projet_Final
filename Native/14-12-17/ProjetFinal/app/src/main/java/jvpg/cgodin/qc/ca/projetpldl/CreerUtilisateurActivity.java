@@ -173,7 +173,7 @@ public class CreerUtilisateurActivity extends AppCompatActivity {
             return resultat;
         }
     }
-    
+
     public class GGDownloadAvatar extends AsyncTask<String, Integer, String> {
 
         @Override
