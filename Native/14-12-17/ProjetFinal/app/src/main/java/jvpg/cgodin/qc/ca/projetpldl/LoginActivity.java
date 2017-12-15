@@ -91,8 +91,8 @@ public class LoginActivity extends AppCompatActivity {
         try {
             JSONObject jObj = new JSONObject(fluxJSONTicket);
 
-            cle = jObj.getInt("cleDEL");
-            noTicket = jObj.getInt("noTicketDEL");
+            cle = jObj.getInt("cle");
+            noTicket = jObj.getInt("noTicket");
 
             if(noTicket != -1){
                 String cleMDP = cle + passwordMD5;

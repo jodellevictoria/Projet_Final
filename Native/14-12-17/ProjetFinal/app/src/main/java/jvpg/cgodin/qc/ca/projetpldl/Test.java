@@ -27,7 +27,7 @@ import static jvpg.cgodin.qc.ca.projetpldl.MainActivity.utilConnecte;
  */
 
 public class Test {
-
+/*
     private DummyContent.DummyItem mItem;
     private Musique musique;
     private String idMusique;
@@ -196,5 +196,5 @@ public class Test {
             return resultat;
         }
 
-    }
+    }*/
 }

@@ -23,7 +23,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -100,7 +99,7 @@ public class SearchYTActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.searchbar, menu);
-        Toast.makeText(SearchYTActivity.this, "Entrez ce que vous cherchez dans la barre de recherche", Toast.LENGTH_SHORT).show();
+        Toast.makeText(SearchYTActivity.this, "Entrez ce que vous chercher dans la barre de recherche...", Toast.LENGTH_SHORT).show();
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =(SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -151,7 +150,7 @@ public class SearchYTActivity extends AppCompatActivity {
                 SearchBarItem s = new SearchBarItem();
                 //s.setMusique("https://www.youtube.com/watch?v="+items.getJSONObject(i).getJSONObject("id").getString("videoId"));
                 //OUUUUUUUUU
-                s.setMusique("http://www.youtube.com/embed/56KYMMGudcU");
+                s.setMusique("http://www.youtube.com/embed/"+items.getJSONObject(i).getJSONObject("id").getString("videoId"));
                 s.setTitre(items.getJSONObject(i).getJSONObject("snippet").get("title")+"");
                 s.setVignette("null");
                 //Toast.makeText(MainActivity2.this, "Item "+i+" : ", Toast.LENGTH_SHORT).show();
@@ -224,7 +223,6 @@ public class SearchYTActivity extends AppCompatActivity {
 
                 Toast.makeText(SearchYTActivity.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
             }
-
             loadNext();
         }
     }
@@ -322,6 +320,7 @@ public class SearchYTActivity extends AppCompatActivity {
                     intent.putExtra("titre",s.getTitre());
                     intent.putExtra("musique",s.getMusique());
                     intent.putExtra("vignette",s.getVignette());
+                    startActivity(intent);
                 }
             });
         }
